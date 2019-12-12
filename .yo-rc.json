@@ -1,0 +1,40 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.icthh.xm.tmf.ms.loyalty"
+    },
+    "jhipsterVersion": "6.5.1",
+    "applicationType": "microservice",
+    "baseName": "loyalty",
+    "packageName": "com.icthh.xm.tmf.ms.loyalty",
+    "packageFolder": "com/icthh/xm/tmf/ms/loyalty",
+    "serverPort": "8716",
+    "authenticationType": "uaa",
+    "uaaBaseName": "uaa",
+    "cacheProvider": "no",
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "prodDatabaseType": "oracle",
+    "searchEngine": false,
+    "messageBroker": "kafka",
+    "serviceDiscoveryType": "consul",
+    "buildTool": "gradle",
+    "enableSwaggerCodegen": true,
+    "jwtSecretKey": "ODVjYjZiZjQxMmI5ZjU1YzA5MGRhYWQ2MDk4OTMyZmUwYzVmZjk1ZWY5MDU0YjI4YjdiY2FiYzNjYTlhN2Q1YjQxYzM0NTM4NmIyMDUxMDc3MTlkOWRjOTdkMDEzYzFhNTE4NjAxYzI1NzBjNjY0ODJmNDAwNzA4NGNjM2MyMTA=",
+    "embeddableLaunchScript": false,
+    "testFrameworks": [
+      "gatling",
+      "cucumber"
+    ],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "clientPackageManager": "npm",
+    "blueprints": [],
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}
