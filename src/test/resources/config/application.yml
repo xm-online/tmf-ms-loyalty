@@ -71,6 +71,9 @@ server:
   port: 10344
   address: localhost
 
+xm-config:
+  enabled: false
+
 # ===================================================================
 # JHipster specific properties
 #
@@ -124,4 +127,10 @@ kafka:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+
+  kafka-system-topic: system_topic
+  kafka-system-queue: system_queue
+
+  lep:
+    tenant-script-storage: XM_MS_CONFIG
