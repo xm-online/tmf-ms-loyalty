@@ -1,39 +1,31 @@
-swagger: '2.0'
+openapi: 3.0.0
 info:
-  version: '1.0'
-  title: ITSF Loyalty Swagger API
+  version: "1.0"
+  title: LoyaltySwagger
   description: The TMForum Loyalty API Specification as developed by Globetom
-host: serverRoot
-basePath: "/api/loyaltyManagement/v1"
-schemes:
-  - http
-consumes:
-  - application/json
-produces:
-  - application/json
 paths:
-  "/loyaltyProgramProductSpec":
+  /loyaltyProgramProductSpec:
     get:
       description: This operation is used to retrieve the loyalty program product
-        specifications. A loyalty program product specification contains loyalty rules.
+        specifications. A loyalty program product specification contains loyalty
+        rules.
       tags:
         - Loyalty Program Product Spec
       operationId: List Product Specs
-      produces:
-        - application/json
-      parameters: []
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            type: array
-            items:
-              "$ref": "#/definitions/ProgramProductSpec"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProgramProductSpec"
       security: []
       x-unitTests:
         - request:
             method: GET
-            uri: "/loyaltyProgramProductSpec"
+            uri: /loyaltyProgramProductSpec
           expectedResponse:
             x-allowExtraHeaders: true
             x-bodyMatchMode: NONE
@@ -44,7 +36,7 @@ paths:
           x-testShouldPass: true
           x-testEnabled: true
           x-testName: List Product Specs
-          x-testDescription: ''
+          x-testDescription: ""
       x-operation-settings:
         CollectParameters: false
         AllowDynamicQueryParameters: false
@@ -56,43 +48,69 @@ paths:
       tags:
         - Loyalty Program Product Spec
       operationId: Create Product Spec
-      produces:
-        - application/json
-      parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/ProgramProductSpec"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProgramProductSpec"
+        required: true
       responses:
-        '201':
+        "201":
           description: Created
-          schema:
-            type: array
-            items:
-              "$ref": "#/definitions/ProgramProductSpec"
-        '409':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProgramProductSpec"
+        "409":
           description: Conflict - Resource already exists.
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests:
         - request:
             method: POST
-            uri: "/loyaltyProgramProductSpec"
+            uri: /loyaltyProgramProductSpec
             headers:
               Content-Type: application/json
-            body: "{\r\n    \"id\" : \"121\",\r\n    \"name\":\"UpComingProfessionalsProgram\",\r\n
-            \   \"productNumber\":\"121\",\r\n    \"description\": \"Loyalty Program
-            to ensure that prepaid youth market is retained\",\r\n    \"needsLoyaltyAccount\":
-            true,\r\n    \"lifeCycleStatus\": \"active\",\r\n    \"brand\" : \"Globetom\",\r\n
-            \   \"validFor\" : {\r\n        \"startDateTime\" : \"2016-01-01T00:00:00Z\",\r\n
-            \       \"endDateTime\" : \"2016-12-31T23:59:59Z\"\r\n    }\r\n}"
+            body: "{\r
+
+              \    \"id\" : \"121\",\r
+
+              \    \"name\":\"UpComingProfessionalsProgram\",\r
+
+              \    \"productNumber\":\"121\",\r
+
+              \    \"description\": \"Loyalty Program to ensure
+              that prepaid youth market is retained\",\r
+
+              \    \"needsLoyaltyAccount\": true,\r
+
+              \    \"lifeCycleStatus\": \"active\",\r
+
+              \    \"brand\" : \"Globetom\",\r
+
+              \    \"validFor\" : {\r
+
+              \        \"startDateTime\" :
+              \"2016-01-01T00:00:00Z\",\r
+
+              \        \"endDateTime\" :
+              \"2016-12-31T23:59:59Z\"\r
+
+              \    }\r
+
+              }"
           expectedResponse:
             x-allowExtraHeaders: true
             x-bodyMatchMode: NONE
@@ -103,7 +121,7 @@ paths:
           x-testShouldPass: true
           x-testEnabled: true
           x-testName: Create Product Spec
-          x-testDescription: ''
+          x-testDescription: ""
       x-operation-settings:
         CollectParameters: false
         AllowDynamicQueryParameters: false
@@ -112,26 +130,30 @@ paths:
   "/loyaltyProgramProductSpec/{productSpecId}":
     get:
       description: This operation is used to retrieve a single loyalty program product
-        specification. A loyalty program product specification contains loyalty rules.
+        specification. A loyalty program product specification contains loyalty
+        rules.
       tags:
         - Loyalty Program Product Spec
       operationId: Get Product Spec
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/ProgramProductSpec"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProgramProductSpec"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -144,20 +166,21 @@ paths:
       tags:
         - Loyalty Program Product Spec
       operationId: Delete Product Spec
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
-        '404':
-          description: Not Found
           schema:
-            "$ref": "#/definitions/Error"
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -170,32 +193,38 @@ paths:
       tags:
         - Loyalty Program Product Spec
       operationId: Update Product Spec
-      produces:
-        - application/json
       parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/UpdateProductSpec"
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProductSpec"
+        required: true
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/ProgramProductSpec"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProgramProductSpec"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -203,28 +232,27 @@ paths:
         AllowDynamicQueryParameters: false
         AllowDynamicFormParameters: false
         IsMultiContentStreaming: false
-  "/loyaltyAction":
+  /loyaltyAction:
     get:
       description: This operation is used to retrieve all the loyalty actions. A loyalty
         action contains a loyalty execution point.
       tags:
         - Loyalty Action
       operationId: List Actions
-      produces:
-        - application/json
-      parameters: []
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyAction"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyAction"
       security: []
       x-unitTests:
         - request:
             method: GET
-            uri: "/loyaltyAction"
+            uri: /loyaltyAction
           expectedResponse:
             x-allowExtraHeaders: true
             x-bodyMatchMode: NONE
@@ -235,7 +263,7 @@ paths:
           x-testShouldPass: true
           x-testEnabled: true
           x-testName: List Actions
-          x-testDescription: ''
+          x-testDescription: ""
       x-operation-settings:
         CollectParameters: false
         AllowDynamicQueryParameters: false
@@ -246,40 +274,64 @@ paths:
       tags:
         - Loyalty Action
       operationId: Create Action
-      produces:
-        - application/json
-      parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/LoyaltyAction"
+      requestBody:
+        $ref: "#/components/requestBodies/LoyaltyAction"
       responses:
-        '201':
+        "201":
           description: Created
-          schema:
-            "$ref": "#/definitions/LoyaltyAction"
-        '409':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyAction"
+        "409":
           description: Conflict - Resource already exists.
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests:
         - request:
             method: POST
-            uri: "/loyaltyAction"
+            uri: /loyaltyAction
             headers:
               Content-Type: application/json
-            body: "{\r\n    \"id\": \"111\",\r\n    \"type\": \"LoyaltyEarn\",\r\n    \"actionAttributes\":
-            {\r\n        \"quantity\": 50\r\n    },\r\n    \"loyaltyExecutionPoint\":
-            {\r\n        \"commonName\": \"LoyaltyEarn\",\r\n        \"description\":
-            \"\",\r\n        \"action\": \"POST\",\r\n        \"endpoint\": \"http://server:port/loyaltyManagement/loyaltyProgramMember/{memberId}/loyaltyBalance/{balanceId}/loyaltyEarn\",\r\n
-            \       \"version\": \"2.0\"\r\n    }\r\n}\r\n"
+            body: "{\r
+
+              \    \"id\": \"111\",\r
+
+              \    \"type\": \"LoyaltyEarn\",\r
+
+              \    \"actionAttributes\": {\r
+
+              \        \"quantity\": 50\r
+
+              \    },\r
+
+              \    \"loyaltyExecutionPoint\": {\r
+
+              \        \"commonName\": \"LoyaltyEarn\",\r
+
+              \        \"description\": \"\",\r
+
+              \        \"action\": \"POST\",\r
+
+              \        \"endpoint\":
+              \"http://server:port/loyaltyManagement/loyaltyProgramMember/{memb\
+              erId}/loyaltyBalance/{balanceId}/loyaltyEarn\",\r
+
+              \        \"version\": \"2.0\"\r
+
+              \    }\r
+
+              }\r\n"
           expectedResponse:
             x-allowExtraHeaders: true
             x-bodyMatchMode: NONE
@@ -290,7 +342,7 @@ paths:
           x-testShouldPass: true
           x-testEnabled: true
           x-testName: Create Action
-          x-testDescription: ''
+          x-testDescription: ""
       x-operation-settings:
         CollectParameters: false
         AllowDynamicQueryParameters: false
@@ -302,22 +354,25 @@ paths:
       tags:
         - Loyalty Action
       operationId: Get Action
-      produces:
-        - application/json
       parameters:
         - name: actionId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyAction"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyAction"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -330,20 +385,21 @@ paths:
       tags:
         - Loyalty Action
       operationId: Delete Action
-      produces:
-        - application/json
       parameters:
         - name: actionId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
-        '404':
-          description: Not Found
           schema:
-            "$ref": "#/definitions/Error"
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -356,32 +412,34 @@ paths:
       tags:
         - Loyalty Action
       operationId: Update Action
-      produces:
-        - application/json
       parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/LoyaltyAction"
         - name: actionId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/LoyaltyAction"
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyAction"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyAction"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -394,32 +452,34 @@ paths:
       tags:
         - Loyalty Action
       operationId: Patch Action
-      produces:
-        - application/json
       parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/LoyaltyAction"
         - name: actionId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/LoyaltyAction"
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyAction"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyAction"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -427,27 +487,26 @@ paths:
         AllowDynamicQueryParameters: false
         AllowDynamicFormParameters: false
         IsMultiContentStreaming: false
-  "/loyaltyCondition":
+  /loyaltyCondition:
     get:
       description: This operation is used to retrieve all the loyalty conditions.
       tags:
         - Loyalty Condition
       operationId: List Conditions
-      produces:
-        - application/json
-      parameters: []
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyCondition"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyCondition"
       security: []
       x-unitTests:
         - request:
             method: GET
-            uri: "/loyaltyCondition"
+            uri: /loyaltyCondition
           expectedResponse:
             x-allowExtraHeaders: true
             x-bodyMatchMode: NONE
@@ -458,7 +517,7 @@ paths:
           x-testShouldPass: true
           x-testEnabled: true
           x-testName: List Conditions
-          x-testDescription: ''
+          x-testDescription: ""
       x-operation-settings:
         CollectParameters: false
         AllowDynamicQueryParameters: false
@@ -469,37 +528,46 @@ paths:
       tags:
         - Loyalty Condition
       operationId: Create Condition
-      produces:
-        - application/json
-      parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/LoyaltyCondition"
+      requestBody:
+        $ref: "#/components/requestBodies/LoyaltyCondition"
       responses:
-        '201':
+        "201":
           description: Created
-          schema:
-            "$ref": "#/definitions/LoyaltyCondition"
-        '409':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyCondition"
+        "409":
           description: Conflict - Resource already exists.
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests:
         - request:
             method: POST
-            uri: "/loyaltyCondition"
+            uri: /loyaltyCondition
             headers:
               Content-Type: application/json
-            body: "{\r\n    \"id\" : \"1\",\r\n    \"attribute\":\"age\",\r\n    \"operator\":\"<=\",\r\n
-            \   \"value\": \"23\"\r\n}\r\n"
+            body: "{\r
+
+              \    \"id\" : \"1\",\r
+
+              \    \"attribute\":\"age\",\r
+
+              \    \"operator\":\"<=\",\r
+
+              \    \"value\": \"23\"\r
+
+              }\r\n"
           expectedResponse:
             x-allowExtraHeaders: true
             x-bodyMatchMode: NONE
@@ -510,7 +578,7 @@ paths:
           x-testShouldPass: true
           x-testEnabled: true
           x-testName: Create Condition
-          x-testDescription: ''
+          x-testDescription: ""
       x-operation-settings:
         CollectParameters: false
         AllowDynamicQueryParameters: false
@@ -518,26 +586,29 @@ paths:
         IsMultiContentStreaming: false
   "/loyaltyCondition/{conditionId}":
     get:
-      description: "•  This operation is used to retrieve a loyalty condition."
+      description: •  This operation is used to retrieve a loyalty condition.
       tags:
         - Loyalty Condition
       operationId: Get Condition
-      produces:
-        - application/json
       parameters:
         - name: conditionId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyCondition"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyCondition"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -550,32 +621,34 @@ paths:
       tags:
         - Loyalty Condition
       operationId: Update Condition
-      produces:
-        - application/json
       parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/LoyaltyCondition"
         - name: conditionId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/LoyaltyCondition"
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyCondition"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyCondition"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -588,20 +661,21 @@ paths:
       tags:
         - Loyalty Condition
       operationId: Delete Condition
-      produces:
-        - application/json
       parameters:
         - name: conditionId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
-        '404':
-          description: Not Found
           schema:
-            "$ref": "#/definitions/Error"
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -614,32 +688,34 @@ paths:
       tags:
         - Loyalty Condition
       operationId: Patch Condition
-      produces:
-        - application/json
       parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/LoyaltyCondition"
         - name: conditionId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/LoyaltyCondition"
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyCondition"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyCondition"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -647,27 +723,26 @@ paths:
         AllowDynamicQueryParameters: false
         AllowDynamicFormParameters: false
         IsMultiContentStreaming: false
-  "/loyaltyEventType":
+  /loyaltyEventType:
     get:
       description: This operation is used to retrieve the loyalty event types.
       tags:
         - Loyalty Event Type
       operationId: List Event Types
-      produces:
-        - application/json
-      parameters: []
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyEventType"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyEventType"
       security: []
       x-unitTests:
         - request:
             method: GET
-            uri: "/loyaltyEventType"
+            uri: /loyaltyEventType
           expectedResponse:
             x-allowExtraHeaders: true
             x-bodyMatchMode: NONE
@@ -678,7 +753,7 @@ paths:
           x-testShouldPass: true
           x-testEnabled: true
           x-testName: List Event Types
-          x-testDescription: ''
+          x-testDescription: ""
       x-operation-settings:
         CollectParameters: false
         AllowDynamicQueryParameters: false
@@ -689,37 +764,43 @@ paths:
       tags:
         - Loyalty Event Type
       operationId: Create Event Types
-      produces:
-        - application/json
-      parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/LoyaltyEventType"
+      requestBody:
+        $ref: "#/components/requestBodies/LoyaltyEventType"
       responses:
-        '201':
+        "201":
           description: Created
-          schema:
-            "$ref": "#/definitions/LoyaltyEventType"
-        '409':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyEventType"
+        "409":
           description: Conflict - A loyalty transaction with the same identifier already
             exists.
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests:
         - request:
             method: POST
-            uri: "/loyaltyEventType"
+            uri: /loyaltyEventType
             headers:
               Content-Type: application/json
-            body: "{\r\n    \"id\": \"111\",\r\n    \"eventType\": \"orderCreationNotification\"\r\n}"
+            body: "{\r
+
+              \    \"id\": \"111\",\r
+
+              \    \"eventType\": \"orderCreationNotification\"\r
+
+              }"
           expectedResponse:
             x-allowExtraHeaders: true
             x-bodyMatchMode: NONE
@@ -730,7 +811,7 @@ paths:
           x-testShouldPass: true
           x-testEnabled: true
           x-testName: Create Event Types
-          x-testDescription: ''
+          x-testDescription: ""
       x-operation-settings:
         CollectParameters: false
         AllowDynamicQueryParameters: false
@@ -742,18 +823,19 @@ paths:
       tags:
         - Loyalty Event Type
       operationId: Get Event Type
-      produces:
-        - application/json
       parameters:
         - name: eventTypeId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
           schema:
-            "$ref": "#/definitions/LoyaltyEventType"
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyEventType"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -762,36 +844,38 @@ paths:
         AllowDynamicFormParameters: false
         IsMultiContentStreaming: false
     put:
-      description: ''
+      description: ""
       tags:
         - Loyalty Event Type
       operationId: Update Event Types
-      produces:
-        - application/json
       parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/LoyaltyEventType"
         - name: eventTypeId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/LoyaltyEventType"
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyEventType"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyEventType"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -804,20 +888,21 @@ paths:
       tags:
         - Loyalty Event Type
       operationId: Delete Event Types
-      produces:
-        - application/json
       parameters:
         - name: eventTypeId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
-        '404':
-          description: Not Found
           schema:
-            "$ref": "#/definitions/Error"
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -826,36 +911,42 @@ paths:
         AllowDynamicFormParameters: false
         IsMultiContentStreaming: false
     patch:
-      description: ''
+      description: ""
       tags:
         - Loyalty Event Type
       operationId: Update Event Types1
-      produces:
-        - application/json
       parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/UpdateEventTypesrequest"
         - name: eventTypeId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEventTypesrequest"
+        required: true
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyEventType"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyEventType"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -870,20 +961,21 @@ paths:
       tags:
         - Loyalty Rule
       operationId: List Rules
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
           schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyRule"
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyRule"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -896,33 +988,35 @@ paths:
       tags:
         - Loyalty Rule
       operationId: Create Rule
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
-        - name: Body
-          in: body
-          required: true
           schema:
-            "$ref": "#/definitions/CreateLoyaltyRule"
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/CreateLoyaltyRule"
       responses:
-        '201':
+        "201":
           description: Created
-          schema:
-            "$ref": "#/definitions/LoyaltyRule"
-        '409':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyRule"
+        "409":
           description: Conflict - A loyalty transaction with the same identifier already
             exists.
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -932,31 +1026,35 @@ paths:
         IsMultiContentStreaming: false
   "/loyaltyProgramProductSpec/{productSpecId}/loyaltyRule/{ruleId}":
     get:
-      description: This operation is used to retrieve a loyalty program product specification
-        loyalty rule.
+      description: This operation is used to retrieve a loyalty program product
+        specification loyalty rule.
       tags:
         - Loyalty Rule
       operationId: Get Rule
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyRule"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyRule"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -969,36 +1067,39 @@ paths:
       tags:
         - Loyalty Rule
       operationId: Update Rule
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
-        - name: Body
-          in: body
-          required: true
           schema:
-            "$ref": "#/definitions/CreateLoyaltyRule"
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/CreateLoyaltyRule"
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyRule"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyRule"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1011,19 +1112,19 @@ paths:
       tags:
         - Loyalty Rule
       operationId: Delete Rule
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: Success
       security: []
       x-unitTests: []
@@ -1037,36 +1138,39 @@ paths:
       tags:
         - Loyalty Rule
       operationId: Patch Rule
-      produces:
-        - application/json
       parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/CreateLoyaltyRule"
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/CreateLoyaltyRule"
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyRule"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyRule"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1080,24 +1184,26 @@ paths:
       tags:
         - Loyalty Rule
       operationId: List Rule Conditions
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
           schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyCondition"
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyCondition"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1106,31 +1212,34 @@ paths:
         AllowDynamicFormParameters: false
         IsMultiContentStreaming: false
     post:
-      description: ''
+      description: ""
       tags:
         - Loyalty Rule
       operationId: Add Rule Condition
-      produces:
-        - application/json
       parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/AddRuleCondition"
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
-      responses:
-        '201':
-          description: Created
           schema:
-            "$ref": "#/definitions/LoyaltyCondition"
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddRuleCondition"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyCondition"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1140,33 +1249,35 @@ paths:
         IsMultiContentStreaming: false
   "/loyaltyProgramProductSpec/{productSpecId}/loyaltyRule/{ruleId}/loyaltyCondition/{conditionId}":
     delete:
-      description: This operation is used to remove a loyalty condition from a loyalty
-        rule.
+      description: This operation is used to remove a loyalty condition from a loyalty rule.
       tags:
         - Loyalty Rule
       operationId: Delete Rule Condition
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: conditionId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
-        '404':
-          description: Not Found
           schema:
-            "$ref": "#/definitions/Error"
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1180,24 +1291,26 @@ paths:
       tags:
         - Loyalty Rule
       operationId: Get Rule Actions
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
           schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyAction"
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyAction"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1210,27 +1323,30 @@ paths:
       tags:
         - Loyalty Rule
       operationId: Add Rule Action
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
-        - name: Body
-          in: body
-          required: true
           schema:
-            "$ref": "#/definitions/AddRuleAction"
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddRuleAction"
+        required: true
       responses:
-        '201':
+        "201":
           description: Created
-          schema:
-            "$ref": "#/definitions/LoyaltyAction"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyAction"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1240,33 +1356,35 @@ paths:
         IsMultiContentStreaming: false
   "/loyaltyProgramProductSpec/{productSpecId}/loyaltyRule/{ruleId}/loyaltyAction/{actionId}":
     delete:
-      description: This operation is used to remove a loyalty action from a loyalty
-        rule.
+      description: This operation is used to remove a loyalty action from a loyalty rule.
       tags:
         - Loyalty Rule
       operationId: Delete Rule Action
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: actionId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
-        '404':
-          description: Not Found
           schema:
-            "$ref": "#/definitions/Error"
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1276,29 +1394,31 @@ paths:
         IsMultiContentStreaming: false
   "/loyaltyProgramProductSpec/{productSpecId}/loyaltyRule/{ruleId}/loyaltyEventType":
     get:
-      description: 'This operation is used to retrieve the loyalty rule’s supported
-        loyalty events. '
+      description: "This operation is used to retrieve the loyalty rule’s supported loyalty
+        events. "
       tags:
         - Loyalty Rule
       operationId: Get Rule Event Types
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
           schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyEventType"
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyEventType"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1307,42 +1427,48 @@ paths:
         AllowDynamicFormParameters: false
         IsMultiContentStreaming: false
     post:
-      description: This operation is used to add a loyalty event type to a loyalty
-        rule.
+      description: This operation is used to add a loyalty event type to a loyalty rule.
       tags:
         - Loyalty Rule
       operationId: Add Rule Event Type
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
-        - name: Body
-          in: body
-          required: true
           schema:
-            "$ref": "#/definitions/AddRuleEventType"
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddRuleEventType"
+        required: true
       responses:
-        '201':
+        "201":
           description: Created
-          schema:
-            "$ref": "#/definitions/LoyaltyEventType"
-        '409':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyEventType"
+        "409":
           description: Conflict - A loyalty transaction with the same identifier already
             exists.
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1357,28 +1483,31 @@ paths:
       tags:
         - Loyalty Rule
       operationId: Delete Rule Event Type
-      produces:
-        - application/json
       parameters:
         - name: productSpecId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: ruleId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: eventTypeId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
-        '404':
-          description: Not Found
           schema:
-            "$ref": "#/definitions/Error"
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1386,28 +1515,27 @@ paths:
         AllowDynamicQueryParameters: false
         AllowDynamicFormParameters: false
         IsMultiContentStreaming: false
-  "/loyaltyProgramMember":
+  /loyaltyProgramMember:
     get:
       description: This operation retrieves loyalty program members. The loyalty program
         member contains accounts and balances in logical containers.
       tags:
         - Loyalty Member
       operationId: Get Members
-      produces:
-        - application/json
-      parameters: []
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyMember"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyMember"
       security: []
       x-unitTests:
         - request:
             method: GET
-            uri: "/loyaltyProgramMember"
+            uri: /loyaltyProgramMember
           expectedResponse:
             x-allowExtraHeaders: true
             x-bodyMatchMode: NONE
@@ -1418,7 +1546,7 @@ paths:
           x-testShouldPass: true
           x-testEnabled: true
           x-testName: Get Members
-          x-testDescription: ''
+          x-testDescription: ""
       x-operation-settings:
         CollectParameters: false
         AllowDynamicQueryParameters: false
@@ -1429,39 +1557,57 @@ paths:
       tags:
         - Loyalty Member
       operationId: Create Member
-      produces:
-        - application/json
-      parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/LoyaltyMember"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoyaltyMember"
+        required: true
       responses:
-        '201':
+        "201":
           description: Created
-          schema:
-            "$ref": "#/definitions/LoyaltyMember"
-        '409':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyMember"
+        "409":
           description: Conflict - A loyalty transaction with the same identifier already
             exists.
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests:
         - request:
             method: POST
-            uri: "/loyaltyProgramMember"
+            uri: /loyaltyProgramMember
             headers:
               Content-Type: application/json
-            body: "{\r\n    \"status\":\"suspended\",\r\n    \"name\":\"James Joe\",\r\n
-            \   \"validFor\": {\r\n        \"startDateTime\":\"2015-04-19T16:42:23.0Z
-            \",\r\n        \"endDateTime\":\"2016-04-19T16:42:23.0Z\"\r\n    }\r\n}"
+            body: "{\r
+
+              \    \"status\":\"suspended\",\r
+
+              \    \"name\":\"James Joe\",\r
+
+              \    \"validFor\": {\r
+
+              \        \"startDateTime\":\"2015-04-19T16:42:23.0Z
+              \",\r
+
+              \        \"endDateTime\":\"2016-04-19T16:42:23.0Z\"\
+              \r
+
+              \    }\r
+
+              }"
           expectedResponse:
             x-allowExtraHeaders: true
             x-bodyMatchMode: NONE
@@ -1472,7 +1618,7 @@ paths:
           x-testShouldPass: true
           x-testEnabled: true
           x-testName: Create Member
-          x-testDescription: ''
+          x-testDescription: ""
       x-operation-settings:
         CollectParameters: false
         AllowDynamicQueryParameters: false
@@ -1485,22 +1631,25 @@ paths:
       tags:
         - Loyalty Member
       operationId: Get Member
-      produces:
-        - application/json
       parameters:
         - name: memberId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyMember"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyMember"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1514,32 +1663,38 @@ paths:
       tags:
         - Loyalty Member
       operationId: Update Member
-      produces:
-        - application/json
       parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/UpdateLoyaltyMember"
         - name: memberId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateLoyaltyMember"
+        required: true
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyMember"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyMember"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1552,20 +1707,21 @@ paths:
       tags:
         - Loyalty Member
       operationId: Delete Member
-      produces:
-        - application/json
       parameters:
         - name: memberId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
-        '404':
-          description: Not Found
           schema:
-            "$ref": "#/definitions/Error"
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1580,20 +1736,21 @@ paths:
       tags:
         - Loyalty Account Balance
       operationId: List Member Balances
-      produces:
-        - application/json
       parameters:
         - name: accountId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
           schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyBalance"
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyBalance"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1606,33 +1763,39 @@ paths:
       tags:
         - Loyalty Account Balance
       operationId: Create Member Balance
-      produces:
-        - application/json
       parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/CreateLoyaltyBalance"
         - name: accountId
           in: path
           required: true
-          type: string
-      responses:
-        '201':
-          description: Created
           schema:
-            "$ref": "#/definitions/LoyaltyBalance"
-        '409':
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLoyaltyBalance"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyBalance"
+        "409":
           description: Conflict - A loyalty transaction with the same identifier already
             exists.
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1642,31 +1805,35 @@ paths:
         IsMultiContentStreaming: false
   "/loyaltyAccount/{accountId}/loyaltyBalance/{balanceId}":
     get:
-      description: This operation retrieves a loyalty program member account. The
-        account resource is also returned within each balance entity.
+      description: This operation retrieves a loyalty program member account. The account
+        resource is also returned within each balance entity.
       tags:
         - Loyalty Account Balance
       operationId: Get Member Balance
-      produces:
-        - application/json
       parameters:
         - name: accountId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: balanceId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyBalance"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyBalance"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1679,24 +1846,26 @@ paths:
       tags:
         - Loyalty Account Balance
       operationId: Update Member Balance
-      produces:
-        - application/json
       parameters:
         - name: accountId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: balanceId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
-        '404':
-          description: Not Found
           schema:
-            "$ref": "#/definitions/Error"
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1710,36 +1879,43 @@ paths:
       tags:
         - Loyalty Account Balance
       operationId: Delete Member Balance
-      produces:
-        - application/json
       parameters:
         - name: accountId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: balanceId
           in: path
           required: true
-          type: string
-        - name: Body
-          in: body
-          required: true
           schema:
-            "$ref": "#/definitions/LoyaltyBalanceUpdate"
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoyaltyBalanceUpdate"
+        required: true
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/LoyaltyBalance"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyBalance"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1753,20 +1929,21 @@ paths:
       tags:
         - Loyalty Member Account
       operationId: List Member Accounts
-      produces:
-        - application/json
       parameters:
         - name: memberId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
           schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyAccount"
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyAccount"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1776,25 +1953,26 @@ paths:
         IsMultiContentStreaming: false
   "/loyaltyProgramMember/{memberId}/loyaltyProgramProduct":
     get:
-      description: This operation is used to retrieve the loyalty program member’s
-        loyalty program products.
+      description: This operation is used to retrieve the loyalty program member’s loyalty
+        program products.
       tags:
         - Loyalty Program Product
       operationId: List Products
-      produces:
-        - application/json
       parameters:
         - name: memberId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
           schema:
-            type: array
-            items:
-              "$ref": "#/definitions/ProductProgramRef"
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductProgramRef"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1807,32 +1985,38 @@ paths:
       tags:
         - Loyalty Program Product
       operationId: Create Product
-      produces:
-        - application/json
       parameters:
         - name: memberId
           in: path
           required: true
-          type: string
-        - name: Body
-          in: body
-          required: true
           schema:
-            "$ref": "#/definitions/ProductProgramRef"
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductProgramRef"
+        required: true
       responses:
-        '201':
+        "201":
           description: Created
-          schema:
-            "$ref": "#/definitions/ProductProgramRef"
-        '409':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductProgramRef"
+        "409":
           description: Conflict - Resource already exists.
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1842,31 +2026,35 @@ paths:
         IsMultiContentStreaming: false
   "/loyaltyProgramMember/{memberId}/loyaltyProgramProduct/{programProductId}":
     get:
-      description: This operation is used to retrieve the loyalty program member’s
-        loyalty program product.
+      description: This operation is used to retrieve the loyalty program member’s loyalty
+        program product.
       tags:
         - Loyalty Program Product
       operationId: Get Product
-      produces:
-        - application/json
       parameters:
         - name: memberId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: programProductId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/ProductProgramRef"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductProgramRef"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1879,24 +2067,26 @@ paths:
       tags:
         - Loyalty Program Product
       operationId: Delete Product
-      produces:
-        - application/json
       parameters:
         - name: memberId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: programProductId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
-        '404':
-          description: Not Found
           schema:
-            "$ref": "#/definitions/Error"
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1910,36 +2100,43 @@ paths:
       tags:
         - Loyalty Program Product
       operationId: Update Product
-      produces:
-        - application/json
       parameters:
         - name: memberId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: programProductId
           in: path
           required: true
-          type: string
-        - name: Body
-          in: body
-          required: true
           schema:
-            "$ref": "#/definitions/ProductProgramUpdateRef"
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductProgramUpdateRef"
+        required: true
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            "$ref": "#/definitions/ProductProgramRef"
-        '404':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductProgramRef"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1949,34 +2146,38 @@ paths:
         IsMultiContentStreaming: false
   "/loyaltyProgramMember/{memberId}/loyaltyProgramProduct/{programProductId}/loyaltyExecutionPoint":
     get:
-      description: This operation is used to retrieve all the loyalty execution points
-        on a loyalty product. These execution points are records of loyalty actions
+      description: This operation is used to retrieve all the loyalty execution points on a
+        loyalty product. These execution points are records of loyalty actions
         executed.
       tags:
         - Loyalty Execution Point
       operationId: Get Execution Points
-      produces:
-        - application/json
       parameters:
         - name: memberId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: programProductId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: Success
-          schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyExecutionPoint"
-        '404':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyExecutionPoint"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -1986,31 +2187,34 @@ paths:
         IsMultiContentStreaming: false
   "/loyaltyAccount/{accountId}/loyaltyBalance/{balanceId}/loyaltyEarn/{transactionId}":
     get:
-      description: This operation retrieves a loyalty account loyalty earn transaction
-        on a spesific account balance.
+      description: This operation retrieves a loyalty account loyalty earn transaction on a
+        spesific account balance.
       tags:
         - Loyalty Earn
       operationId: Get Earn Transaction
-      produces:
-        - application/json
       parameters:
         - name: accountId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: transactionId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: balanceId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
           schema:
-            "$ref": "#/definitions/LoyaltyTransactionRef"
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyTransactionRef"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -2020,29 +2224,31 @@ paths:
         IsMultiContentStreaming: false
   "/loyaltyAccount/{accountId}/loyaltyBalance/{balanceId}/loyaltyEarn":
     get:
-      description: This operation retrieves a loyalty account loyalty earn transactions
-        on a spesific account balance.
+      description: This operation retrieves a loyalty account loyalty earn transactions on
+        a spesific account balance.
       tags:
         - Loyalty Earn
       operationId: List Earn Transactions
-      produces:
-        - application/json
       parameters:
         - name: accountId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: balanceId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
           schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyTransactionRef"
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyTransactionRef"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -2055,32 +2261,38 @@ paths:
       tags:
         - Loyalty Earn
       operationId: Earn Loyalty Balance
-      produces:
-        - application/json
       parameters:
         - name: accountId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: balanceId
           in: path
           required: true
-          type: string
-      responses:
-        '201':
-          description: Created
           schema:
-            "$ref": "#/definitions/LoyaltyTransactionRef"
-        '409':
+            type: string
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyTransactionRef"
+        "409":
           description: Conflict - A loyalty transaction with the same identifier already
             exists.
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -2095,30 +2307,35 @@ paths:
       tags:
         - Loyalty Burn
       operationId: Get Burn Transaction
-      produces:
-        - application/json
       parameters:
         - name: accountId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: balanceId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: transactionId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
       responses:
-        '200':
-          description: ''
-          schema:
-            "$ref": "#/definitions/LoyaltyTransactionRef"
-        '404':
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyTransactionRef"
+        "404":
           description: Not Found
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -2128,29 +2345,31 @@ paths:
         IsMultiContentStreaming: false
   "/loyaltyAccount/{accountId}/loyaltyBalance/{balanceId}/loyaltyBurn":
     get:
-      description: This operation retrieves a loyalty account loyalty burn transactions
-        on a spesific account balance.
+      description: This operation retrieves a loyalty account loyalty burn transactions on
+        a spesific account balance.
       tags:
         - Loyalty Burn
       operationId: List Burn Transactions
-      produces:
-        - application/json
       parameters:
         - name: accountId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: balanceId
           in: path
           required: true
-          type: string
-      responses:
-        '200':
-          description: Success
           schema:
-            type: array
-            items:
-              "$ref": "#/definitions/LoyaltyTransactionRef"
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LoyaltyTransactionRef"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -2163,32 +2382,38 @@ paths:
       tags:
         - Loyalty Burn
       operationId: Burn Loyalty Balance
-      produces:
-        - application/json
       parameters:
         - name: accountId
           in: path
           required: true
-          type: string
+          schema:
+            type: string
         - name: balanceId
           in: path
           required: true
-          type: string
-      responses:
-        '201':
-          description: Created
           schema:
-            "$ref": "#/definitions/LoyaltyTransactionRef"
-        '409':
+            type: string
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoyaltyTransactionRef"
+        "409":
           description: Conflict - A loyalty transaction with the same identifier already
             exists.
-          schema:
-            "$ref": "#/definitions/Error"
-        '422':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests: []
       x-operation-settings:
@@ -2196,40 +2421,60 @@ paths:
         AllowDynamicQueryParameters: false
         AllowDynamicFormParameters: false
         IsMultiContentStreaming: false
-  "/loyaltyEvent":
+  /loyaltyEvent:
     post:
       description: This operation specifies a loyalty event that has occurred.
       tags:
         - Loyalty Event
       operationId: Notify Loyalty Event
-      produces:
-        - application/json
-      parameters:
-        - name: Body
-          in: body
-          required: true
-          schema:
-            "$ref": "#/definitions/LoyaltyEvent"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoyaltyEvent"
+        required: true
       responses:
-        '201':
+        "201":
           description: Created
-        '422':
+        "422":
           description: Unprocessable Entity - Field rule violation or missing required
             attribute.
-          schema:
-            "$ref": "#/definitions/Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
       security: []
       x-unitTests:
         - request:
             method: POST
-            uri: "/loyaltyEvent"
+            uri: /loyaltyEvent
             headers:
               Content-Type: application/json
-            body: "{\r\n    \"eventId\":\"00001\",\r\n    \"eventTime\":\"2013-04-19T16:42:25-04:00\",\r\n
-            \   \"eventType\":\"orderCreationNotification\",\r\n    \"event\":{\r\n
-            \       \"productOrder\":{\r\n            \"id\":\"42\",\r\n             \"href\":\"http://serverlocation:port/orderManagement/productOrder/42\",\r\n
-            \            \"externalId\":\"NiceNameForTheConsumer_42\"\r\n        }\r\n
-            \   }\r\n}\r\n"
+            body: "{\r
+
+              \    \"eventId\":\"00001\",\r
+
+              \    \"eventTime\":\"2013-04-19T16:42:25-04:00\",\r
+
+              \    \"eventType\":\"orderCreationNotification\",\r
+
+              \    \"event\":{\r
+
+              \        \"productOrder\":{\r
+
+              \            \"id\":\"42\",\r
+
+              \             \"href\":\"http://serverlocation:port\
+              /orderManagement/productOrder/42\",\r
+
+              \             \"externalId\":\"NiceNameForTheConsum\
+              er_42\"\r
+
+              \        }\r
+
+              \    }\r
+
+              }\r\n"
           expectedResponse:
             x-allowExtraHeaders: true
             x-bodyMatchMode: NONE
@@ -2240,498 +2485,525 @@ paths:
           x-testShouldPass: true
           x-testEnabled: true
           x-testName: Notify Loyalty Event
-          x-testDescription: ''
+          x-testDescription: ""
       x-operation-settings:
         CollectParameters: false
         AllowDynamicQueryParameters: false
         AllowDynamicFormParameters: false
         IsMultiContentStreaming: false
-definitions:
-  ProgramProductSpec:
-    title: ProgramProductSpec
-    type: object
-    properties:
-      id:
-        type: string
-      name:
-        type: string
-      productNumber:
-        type: string
-      description:
-        type: string
-      needsLoyaltyAccount:
-        type: boolean
-      lifeCycleStatus:
-        type: string
-      brand:
-        type: string
-      validFor:
-        "$ref": "#/definitions/ValidFor"
-    required:
-      - id
-      - name
-      - productNumber
-      - description
-      - needsLoyaltyAccount
-      - lifeCycleStatus
-      - brand
-      - validFor
-  UpdateProductSpec:
-    title: UpdateProductSpec
-    type: object
-    properties:
-      name:
-        type: string
-      description:
-        type: string
-      productNumber:
-        type: string
-      brand:
-        type: string
-    required:
-      - name
-      - description
-      - productNumber
-      - brand
-  LoyaltyAction:
-    title: LoyaltyAction
-    type: object
-    properties:
-      id:
-        type: string
-      type:
-        type: string
-      actionAttributes:
-        type: object
-      body:
-        type: object
-      headers:
-        type: object
-      commonName:
-        type: string
-      description:
-        type: string
-      action:
-        type: string
-      endpoint:
-        type: string
-    required:
-      - type
-      - action
-      - endpoint
-  LoyaltyActionLinkRef:
-    title: LoyaltyActionLinkRef
-    type: object
-    properties:
-      id:
-        type: string
-      href:
-        type: string
-  LoyaltyCondition:
-    title: LoyaltyCondition
-    type: object
-    properties:
-      id:
-        type: string
-      attribute:
-        type: string
-      operator:
-        type: string
-      value:
-        type: string
-    required:
-      - attribute
-      - operator
-      - value
-  LoyaltyConditionLinkRef:
-    title: LoyaltyConditionLinkRef
-    type: object
-    properties:
-      id:
-        type: string
-      href:
-        type: string
-  LoyaltyEventType:
-    title: LoyaltyEventType
-    type: object
-    properties:
-      id:
-        type: string
-      eventType:
-        type: string
-    required:
-      - eventType
-  LoyaltyEventTypeLinkRef:
-    title: LoyaltyEventTypeLinkRef
-    type: object
-    properties:
-      id:
-        type: string
-      href:
-        type: string
-  LoyaltyRule:
-    title: LoyaltyRule
-    type: object
-    properties:
-      id:
-        type: string
-      commonName:
-        type: string
-      description:
-        type: string
-      isCNF:
-        type: boolean
-      hasSubRules:
-        type: boolean
-      isMandatoryEvaluation:
-        type: boolean
-      usage:
-        type: string
-      keywords:
-        type: string
-      policyName:
-        type: string
-      loyaltyEventType:
-        type: array
-        items:
-          "$ref": "#/definitions/LoyaltyEventTypeLinkRef"
-      loyaltyCondition:
-        type: array
-        items:
-          "$ref": "#/definitions/LoyaltyConditionLinkRef"
-      loyaltyAction:
-        type: array
-        items:
-          "$ref": "#/definitions/LoyaltyActionLinkRef"
-  CreateLoyaltyRule:
-    title: LoyaltyRule
-    type: object
-    properties:
-      id:
-        type: string
-      commonName:
-        type: string
-      description:
-        type: string
-      isCNF:
-        type: boolean
-      hasSubRules:
-        type: boolean
-      isMandatoryEvaluation:
-        type: boolean
-      usage:
-        type: string
-      keywords:
-        type: string
-      policyName:
-        type: string
-  AddRuleCondition:
-    title: RuleCondition
-    type: object
-    properties:
-      id:
-        type: string
-    required:
-      - id
-  AddRuleAction:
-    title: RuleAction
-    type: object
-    properties:
-      id:
-        type: string
-    required:
-      - id
-  AddRuleEventType:
-    title: RuleEventType
-    type: object
-    properties:
-      id:
-        type: string
-    required:
-      - id
-  LoyaltyExecutionPoint:
-    title: LoyaltyExecutionPoint
-    type: object
-    properties:
-      id:
-        type: string
-      type:
-        type: string
-      actionAttributes:
-        type: object
-      body:
-        type: object
-      headers:
-        type: object
-      commonName:
-        type: string
-      description:
-        type: string
-      action:
-        type: string
-      endpoint:
-        type: string
-      dateTime:
-        type: string
-  ValidFor:
-    title: ValidFor
-    type: object
-    properties:
-      startDateTime:
-        type: string
-      endDateTime:
-        type: string
-    required:
-      - startDateTime
-      - endDateTime
-  LoyaltyMember:
-    title: CreateLoyaltyMember
-    type: object
-    properties:
-      id:
-        type: string
-      status:
-        type: string
-      name:
-        type: string
-      validFor:
-        "$ref": "#/definitions/ValidFor"
-  UpdateEventTypesrequest:
-    title: Update Event TypesRequest
-    type: object
-    properties:
-      eventType:
-        type: string
-    required:
-      - eventType
-  CreateLoyaltyBalance:
-    title: CreateLoyaltyBalance
-    type: object
-    properties:
-      id:
-        type: string
-      quantity:
-        "$ref": "#/definitions/Quantity"
-      validFor:
-        "$ref": "#/definitions/ValidFor"
-    required:
-      - quantity
-  LoyaltyBalance:
-    title: LoyaltyBalance
-    type: object
-    properties:
-      id:
-        type: string
-      quantity:
-        "$ref": "#/definitions/Quantity"
-      validFor:
-        "$ref": "#/definitions/ValidFor"
-      loyaltyProgramMember:
-        "$ref": "#/definitions/LoyaltyMemberLinkRef"
-  LoyaltyBalanceUpdate:
-    title: LoyaltyBalanceUpdate
-    type: object
-    properties:
-      validFor:
-        "$ref": "#/definitions/ValidFor"
-  LoyaltyAccount:
-    title: LoyaltyAccount
-    type: object
-    properties:
-      id:
-        type: string
-      href:
-        type: string
-      loyaltyProgramProduct:
-        "$ref": "#/definitions/ProductLinkRef"
-  LoyaltyAccountCreate:
-    title: LoyaltyAccountCreate
-    type: object
-    properties:
-      id:
-        type: string
-      loyaltyBalance:
-        "$ref": "#/definitions/CreateLoyaltyBalance"
-  UpdateLoyaltyMember:
-    title: UpdateLoyaltyMember
-    type: object
-    properties:
-      status:
-        type: string
-      name:
-        type: string
-      validFor:
-        "$ref": "#/definitions/ValidFor"
-  LoyaltyMemberLinkRef:
-    title: LoyaltyMemberLinkRef
-    type: object
-    properties:
-      id:
-        type: string
-      href:
-        type: string
-  ProductProgramUpdateRef:
-    title: ProductProgramUpdate
-    type: object
-    properties:
-      name:
-        type: string
-      description:
-        type: string
-      productStatus:
-        type: string
-      validFor:
-        "$ref": "#/definitions/ValidFor"
-  ProductProgramRef:
-    title: ProductProgram
-    type: object
-    properties:
-      id:
-        type: string
-      name:
-        type: string
-      description:
-        type: string
-      productStatus:
-        type: string
-      validFor:
-        "$ref": "#/definitions/ValidFor"
-      productSpecId:
-        type: string
-      accountId:
-        type: string
-      loyaltyAccount:
-        "$ref": "#/definitions/LoyaltyAccountCreate"
-      characteristics:
-        type: array
-        items:
-          "$ref": "#/definitions/ProductCharacteristics"
-    required:
-      - name
-      - productSpecId
-  ProductCharacteristics:
-    title: ProductLinkRef
-    type: object
-    properties:
-      name:
-        type: string
-      value:
-        type: string
-  ProductLinkRef:
-    title: ProductLinkRef
-    type: object
-    properties:
-      id:
-        type: string
-      href:
-        type: string
-  LoyaltyTransactionRef:
-    title: LoyaltyTransaction
-    type: object
-    properties:
-      id:
-        type: string
-      href:
-        type: string
-      quantity:
-        type: integer
-        format: int32
-      openingBalance:
-        type: number
-        format: double
-      closingBalance:
-        type: number
-        format: double
-      dateTime:
-        type: string
-        format: dateTime
-      description:
-        type: string
-    required:
-      - id
-      - href
-      - quantity
-      - description
-      - openingBalance
-      - closingBalance
-      - dateTime
-  LoyaltyEvent:
-    title: LoyaltyEvent
-    type: object
-    properties:
-      eventId:
-        type: string
-      eventTime:
-        type: string
-      eventType:
-        type: string
-      memberId:
-        type: string
-      event:
-        "$ref": "#/definitions/Event"
-    required:
-      - memberId
-      - eventType
-      - event
-  Quantity:
-    title: Quantity
-    type: object
-    properties:
-      unit:
-        type: string
-      balance:
-        type: number
-        format: double
-    required:
-      - unit
-      - balance
-  Event:
-    title: Event
-    type: object
-  Error:
-    required:
-      - code
-      - message
-    properties:
-      code:
-        description: An integer coding the error type. This is given to caller so
-          he can translate them if required.
-        type: integer
-      message:
-        description: A short localized string that describes the error.
-        type: string
-      description:
-        description: "(optional) A long localized error description if needed. It
-          can contain precise information about which parameter is missing, or what
-          are the identifier acceptable values."
-        type: string
-      infoURL:
-        description: "(optional) A URL to online documentation that provides more
-          information about the error."
-        type: string
-      details:
-        type: array
-        items:
-          "$ref": "#/definitions/ErrorDetail"
-  ErrorDetail:
-    required:
-      - code
-      - message
-    properties:
-      code:
-        description: An integer coding the error type. This is given to caller so
-          he can translate them if required.
-        type: integer
-      message:
-        description: A short localized string that describes the error.
-        type: string
-      description:
-        description: "(optional) A long localized error description if needed. It
-          can contain precise information about which parameter is missing, or what
-          are the identifier acceptable values."
-        type: string
-      infoURL:
-        description: "(optional) A URL to online documentation that provides more
-          information about the error."
-        type: string
-
+servers:
+  - url: http://serverRoot/tmf-api/loyaltyManagement/v1
+components:
+  requestBodies:
+    LoyaltyEventType:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/LoyaltyEventType"
+      required: true
+    LoyaltyCondition:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/LoyaltyCondition"
+      required: true
+    LoyaltyAction:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/LoyaltyAction"
+      required: true
+    CreateLoyaltyRule:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CreateLoyaltyRule"
+      required: true
+  schemas:
+    ProgramProductSpec:
+      title: ProgramProductSpec
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        productNumber:
+          type: string
+        description:
+          type: string
+        needsLoyaltyAccount:
+          type: boolean
+        lifeCycleStatus:
+          type: string
+        brand:
+          type: string
+        validFor:
+          $ref: "#/components/schemas/ValidFor"
+      required:
+        - id
+        - name
+        - productNumber
+        - description
+        - needsLoyaltyAccount
+        - lifeCycleStatus
+        - brand
+        - validFor
+    UpdateProductSpec:
+      title: UpdateProductSpec
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        productNumber:
+          type: string
+        brand:
+          type: string
+      required:
+        - name
+        - description
+        - productNumber
+        - brand
+    LoyaltyAction:
+      title: LoyaltyAction
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        actionAttributes:
+          type: object
+        body:
+          type: object
+        headers:
+          type: object
+        commonName:
+          type: string
+        description:
+          type: string
+        action:
+          type: string
+        endpoint:
+          type: string
+      required:
+        - type
+        - action
+        - endpoint
+    LoyaltyActionLinkRef:
+      title: LoyaltyActionLinkRef
+      type: object
+      properties:
+        id:
+          type: string
+        href:
+          type: string
+    LoyaltyCondition:
+      title: LoyaltyCondition
+      type: object
+      properties:
+        id:
+          type: string
+        attribute:
+          type: string
+        operator:
+          type: string
+        value:
+          type: string
+      required:
+        - attribute
+        - operator
+        - value
+    LoyaltyConditionLinkRef:
+      title: LoyaltyConditionLinkRef
+      type: object
+      properties:
+        id:
+          type: string
+        href:
+          type: string
+    LoyaltyEventType:
+      title: LoyaltyEventType
+      type: object
+      properties:
+        id:
+          type: string
+        eventType:
+          type: string
+      required:
+        - eventType
+    LoyaltyEventTypeLinkRef:
+      title: LoyaltyEventTypeLinkRef
+      type: object
+      properties:
+        id:
+          type: string
+        href:
+          type: string
+    LoyaltyRule:
+      title: LoyaltyRule
+      type: object
+      properties:
+        id:
+          type: string
+        commonName:
+          type: string
+        description:
+          type: string
+        isCNF:
+          type: boolean
+        hasSubRules:
+          type: boolean
+        isMandatoryEvaluation:
+          type: boolean
+        usage:
+          type: string
+        keywords:
+          type: string
+        policyName:
+          type: string
+        loyaltyEventType:
+          type: array
+          items:
+            $ref: "#/components/schemas/LoyaltyEventTypeLinkRef"
+        loyaltyCondition:
+          type: array
+          items:
+            $ref: "#/components/schemas/LoyaltyConditionLinkRef"
+        loyaltyAction:
+          type: array
+          items:
+            $ref: "#/components/schemas/LoyaltyActionLinkRef"
+    CreateLoyaltyRule:
+      title: LoyaltyRule
+      type: object
+      properties:
+        id:
+          type: string
+        commonName:
+          type: string
+        description:
+          type: string
+        isCNF:
+          type: boolean
+        hasSubRules:
+          type: boolean
+        isMandatoryEvaluation:
+          type: boolean
+        usage:
+          type: string
+        keywords:
+          type: string
+        policyName:
+          type: string
+    AddRuleCondition:
+      title: RuleCondition
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    AddRuleAction:
+      title: RuleAction
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    AddRuleEventType:
+      title: RuleEventType
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    LoyaltyExecutionPoint:
+      title: LoyaltyExecutionPoint
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        actionAttributes:
+          type: object
+        body:
+          type: object
+        headers:
+          type: object
+        commonName:
+          type: string
+        description:
+          type: string
+        action:
+          type: string
+        endpoint:
+          type: string
+        dateTime:
+          type: string
+    ValidFor:
+      title: ValidFor
+      type: object
+      properties:
+        startDateTime:
+          type: string
+        endDateTime:
+          type: string
+      required:
+        - startDateTime
+        - endDateTime
+    LoyaltyMember:
+      title: CreateLoyaltyMember
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        name:
+          type: string
+        validFor:
+          $ref: "#/components/schemas/ValidFor"
+    UpdateEventTypesrequest:
+      title: Update Event TypesRequest
+      type: object
+      properties:
+        eventType:
+          type: string
+      required:
+        - eventType
+    CreateLoyaltyBalance:
+      title: CreateLoyaltyBalance
+      type: object
+      properties:
+        id:
+          type: string
+        quantity:
+          $ref: "#/components/schemas/Quantity"
+        validFor:
+          $ref: "#/components/schemas/ValidFor"
+      required:
+        - quantity
+    LoyaltyBalance:
+      title: LoyaltyBalance
+      type: object
+      properties:
+        id:
+          type: string
+        quantity:
+          $ref: "#/components/schemas/Quantity"
+        validFor:
+          $ref: "#/components/schemas/ValidFor"
+        loyaltyProgramMember:
+          $ref: "#/components/schemas/LoyaltyMemberLinkRef"
+    LoyaltyBalanceUpdate:
+      title: LoyaltyBalanceUpdate
+      type: object
+      properties:
+        validFor:
+          $ref: "#/components/schemas/ValidFor"
+    LoyaltyAccount:
+      title: LoyaltyAccount
+      type: object
+      properties:
+        id:
+          type: string
+        href:
+          type: string
+        loyaltyProgramProduct:
+          $ref: "#/components/schemas/ProductLinkRef"
+    LoyaltyAccountCreate:
+      title: LoyaltyAccountCreate
+      type: object
+      properties:
+        id:
+          type: string
+        loyaltyBalance:
+          $ref: "#/components/schemas/CreateLoyaltyBalance"
+    UpdateLoyaltyMember:
+      title: UpdateLoyaltyMember
+      type: object
+      properties:
+        status:
+          type: string
+        name:
+          type: string
+        validFor:
+          $ref: "#/components/schemas/ValidFor"
+    LoyaltyMemberLinkRef:
+      title: LoyaltyMemberLinkRef
+      type: object
+      properties:
+        id:
+          type: string
+        href:
+          type: string
+    ProductProgramUpdateRef:
+      title: ProductProgramUpdate
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        productStatus:
+          type: string
+        validFor:
+          $ref: "#/components/schemas/ValidFor"
+    ProductProgramRef:
+      title: ProductProgram
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        productStatus:
+          type: string
+        validFor:
+          $ref: "#/components/schemas/ValidFor"
+        productSpecId:
+          type: string
+        accountId:
+          type: string
+        loyaltyAccount:
+          $ref: "#/components/schemas/LoyaltyAccountCreate"
+        characteristics:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductCharacteristics"
+      required:
+        - name
+        - productSpecId
+    ProductCharacteristics:
+      title: ProductLinkRef
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    ProductLinkRef:
+      title: ProductLinkRef
+      type: object
+      properties:
+        id:
+          type: string
+        href:
+          type: string
+    LoyaltyTransactionRef:
+      title: LoyaltyTransaction
+      type: object
+      properties:
+        id:
+          type: string
+        href:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        openingBalance:
+          type: number
+          format: double
+        closingBalance:
+          type: number
+          format: double
+        dateTime:
+          type: string
+          format: dateTime
+        description:
+          type: string
+      required:
+        - id
+        - href
+        - quantity
+        - description
+        - openingBalance
+        - closingBalance
+        - dateTime
+    LoyaltyEvent:
+      title: LoyaltyEvent
+      type: object
+      properties:
+        eventId:
+          type: string
+        eventTime:
+          type: string
+        eventType:
+          type: string
+        memberId:
+          type: string
+        event:
+          $ref: "#/components/schemas/Event"
+      required:
+        - memberId
+        - eventType
+        - event
+    Quantity:
+      title: Quantity
+      type: object
+      properties:
+        unit:
+          type: string
+        balance:
+          type: number
+          format: double
+      required:
+        - unit
+        - balance
+    Event:
+      title: Event
+      type: object
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          description: An integer coding the error type. This is given to caller so he can
+            translate them if required.
+          type: integer
+        message:
+          description: A short localized string that describes the error.
+          type: string
+        description:
+          description: (optional) A long localized error description if needed. It can
+            contain precise information about which parameter is missing, or
+            what are the identifier acceptable values.
+          type: string
+        infoURL:
+          description: (optional) A URL to online documentation that provides more
+            information about the error.
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ErrorDetail"
+    ErrorDetail:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          description: An integer coding the error type. This is given to caller so he can
+            translate them if required.
+          type: integer
+        message:
+          description: A short localized string that describes the error.
+          type: string
+        description:
+          description: (optional) A long localized error description if needed. It can
+            contain precise information about which parameter is missing, or
+            what are the identifier acceptable values.
+          type: string
+        infoURL:
+          description: (optional) A URL to online documentation that provides more
+            information about the error.
+          type: string
