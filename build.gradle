@@ -54,6 +54,8 @@ apply from: "gradle/sonar.gradle"
 apply from: "gradle/swagger.gradle"
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
+apply plugin: 'war'
+
 if (project.hasProperty("prod")) {
     apply from: "gradle/profile_prod.gradle"
 } else {
@@ -118,6 +120,10 @@ if (OperatingSystem.current().isWindows()) {
 }
 
 defaultTasks "bootRun"
+
+bootWar {
+    mainClassName = 'com.icthh.xm.tmf.ms.product.ProductApp'
+}
 
 springBoot {
     mainClassName = "com.icthh.xm.tmf.ms.loyalty.LoyaltyApp"
@@ -357,5 +363,6 @@ wrapper {
     gradleVersion = "5.6.4"
 }
 
+bootWar.dependsOn war
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo
