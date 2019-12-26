@@ -1,0 +1,40 @@
+language: java
+jdk:
+- openjdk11
+install: true
+addons:
+  sonarcloud:
+    organization: xm-online
+    token:
+      secure: vTf6MLhCgjmg0CcpAqcOkcMk9ks/z2yeGfH7kexXgSld0usCw8HJlV1U4XJ0sJkTugwjw2aEOgbZvKqh8cpzzX6bkfzLJrKjdneRmr8xceOZ3oN6Z4mafGERgJSS6WnVa0TNws083DgZ+WsPtfhx/wPH43kjvxH8+3eLZC4x8fGfyIBa6uJrZPIzThiMbGsq6PzK22UzeIB3QPeHAH2cP6pUYtouYpQzrwehT1S7WY+I2WGv/DMm+aqZSXgHHJhWh/uP0I9Rn9oxDKX0pEiyjIdtAKFfYLrjQ1RwzFIbWLyUVEGM7F2zaDDd8f21FbJRhujhvEjGaO0U1etlY2v2ar1mHosjXe3AuJ3CaanFFmJ1CQfj7Ch9Ad4GnCEDIu9+elczUF0AMMzex1qC/CVyfHFSHcOGcjgFhxlTGNhsI1XUGOLa2k7sXm2EgIhOrUpAyL6t7NWkFY43Ybz2NZJrlru8UKdmwK25KLXVyqVisw1SOdKa9Qh5ZxdmZBM1bEU3p8hL/TVAZfKrMtEcU9Ysm/szKovbpSj02pUcHkTp/1g0GoPGi8KJUaauqOdfDGPIOZuhtUuUSdsuOqPdktcNPZvIYWASN3SPI376ljBvT100UuPKhwnO7GXMRXhyLAYj10Pp5M485gRid2Ty2ja+Qkh44t2cAIeWYhwRXTezz5w=
+    branches:
+    - master
+script:
+- set -e
+- "./gradlew --no-daemon --refresh-dependencies clean check test"
+- "./gradlew -x test -Pprod --no-daemon bootWar"
+- docker login -u $DOCKER_USER -p $DOCKER_PASS
+- export DOCKER_REPO=$(echo  -n $TRAVIS_REPO_SLUG | sed -e 's/^xm-online\//xmonline\//g')
+- export IMAGE_BRANCH=$(echo -n $TRAVIS_BRANCH | sed -e 's/\//-/g')
+- docker build -t $DOCKER_REPO:$IMAGE_BRANCH -t $DOCKER_REPO:$IMAGE_BRANCH-$TRAVIS_BUILD_NUMBER
+  --label commit_id="$TRAVIS_COMMIT" --label commit_message="$TRAVIS_COMMIT_MESSAGE"
+  -f src/main/docker/Dockerfile .
+- docker push $DOCKER_REPO:$IMAGE_BRANCH
+- docker push $DOCKER_REPO:$IMAGE_BRANCH-$TRAVIS_BUILD_NUMBER
+- if [ "$IMAGE_BRANCH" == "master" ]; then docker tag $DOCKER_REPO:$IMAGE_BRANCH $DOCKER_REPO:latest;
+  docker push $DOCKER_REPO:latest; export SONAR_PK=$(echo  -n $TRAVIS_REPO_SLUG |
+  sed -e 's/\//:/g'); ./gradlew -x test --no-daemon sonarqube -Dsonar.projectKey="$SONAR_PK"
+  -Dsonar.projectName="$SONAR_PK" -Dsonar.java.binaries="." -Dsonar.projectVersion="$IMAGE_BRANCH";
+  fi
+cache:
+  directories:
+  - "~/.gradle"
+  - "~/.m2"
+env:
+  global:
+  - secure: VzqPr/8RmnNUOQfsGDPjEMtm660FvSqfMgFo/my8PSoob/UoKdT9QGpPm/foIAn3M64ORyB6jEcrdbVD7Ia6xeS40CIRochHcMMaPi/laIkCZXwvR2t6mGI1c9Q56BBNrtFlNMi3EvKQbd5k477dIkQSJ3KDms2oS5/EBcfy6a+UU6kymZcRTnJcI26mh1NR1a/gY+JkHdfm5ycXpfaUWDixPO/op2SHE0SN+4j3hijeN6az98+aq70j2hThDH9F5qwzNWro8Mo5uFiMpCB36EDroy0QlLc8NRYQjXKRDqsD2TVE73AGjHS9PxmQcAL8bhRgxveWXWsNKNfEgVsjX0uClohZry7h6gIdx9FztJHIV1ZHD5Ma1DB/Dpgo9sNaGj20/AUyeCxTkt7RKGD2kQqeBJ/m4yeVCGXKaeB3N2EntaPpOd+twHP88LVprPlDxtekr5LEHkCoTQfKT0kSMaTf7yirtoPuQFImlahJYY3LpvDJNdF+qFwedlnwzZvPZWziM3jcsZAPosHTXKvC5qAJdwtIKtuJ12wS8JR5kgGVOc8iSdVhaxh9oAnTXzNVW4gHFLOFCZ8P/kQmHXt5M7G3pRwwXFEXP/fomb+Hs8IviequKpOm2bHHXpsh5fSiy4VmM0MjUrPOiaSbcJoop+m3ob+Cfv4gUXZlWBoGTng=
+  - secure: sJWkjB64crkbcfVXVSVIEFOslqYdENyIXG+h5DnWC9mOXHpTDS1GpWruo+UMHptfcfI1BpLPO+Qy5s4FZkWS+dniOtDXlZyrA8+j5KKTvyCi9pczRPACTnDqPgUQj6iwQtp/Uu7JgzxjOWXn0MK0ZSTuQr0UkXFEUn+WzgSHvjMg29/JDr+2Aaq8obJLfOAxgJJJl9WwEvdf8Fa7kP4rmfjw8p1kdg9BX7sdc24Lbluh3SLo8Svv6QtqpasRsP1ZZPRfRLeNcPsb9rZ3Irr4GyPu3zw5bddVXj4d0aEepsB+uMAp83pWSbz1MaTjbDcD5gV5rAUQ/h4z5cqYaZUHwl0ZJx4vIfSax+MAmPdeGS/Ofza2fhhRjsbDX91uoeOv9eIbjiuXZKZ/+eSozFeLvDVip3lC9ZBKklN/RwwRgoQ6v7Hffn4Bfb4fvemkXok4u3iWBQPhS0o3aXtvshY5mKqTT+Jw4l9RVZrTeNFZlabCswVFGeqPAMhy88uMXZJb3fS2YftVYoadeb4zWe8NHC596O2vE3NkRnAPZq/rpZL44yx4++hPlN/z9t3panBXm9jUhemfiG93VQAGu044tW0x5cg2CUuCOurZAxKgxbF4mZaEHq3l1B+wk2Xx4EmFDIXD49wEIJe5HlorcSsFgBnCgEokSY/Vn+9uDkeAUcI=
+notifications:
+  slack:
+    rooms:
+      secure: eHvxMZJsCw0vBFWkSsL8YIwam4b43HppJ2m9I+QhW6v/oG7LdxxKeDjpTOn7ramXZxxGZEqibA5QjilMqnraPzHy3lqo7x8+LQXMN5sfDI/B6TZmWZ5r2oEr384L3p02xLwalA2I18xjPwWEQFdERL4wzJNvvXIki/T3X3GGi4pglAfyM6gLTsP0H0fA4WSj8e6Z9Ap7B1UD3tcwKk6+9vbJUEmc+HTx6my317hkmbi/I6mXZb9p63q2yvKnjEaU8vlULYls3gPxQDrozLbDMN5dFATS2p5mqrJVNY8r3gcJb0l38eFVzl09YWiNTfEWgT9k1zi3O9FF8GG2VyJQv8i4LGcwZE1Wrdd1iakWugXlHTnROD1wjmgIwN7f0UBX6VXztJ92NXqKus5CkfBioksi45uHLJJFbnz8vMXQCCkidW/VVg91GitMjN1s16JcXbBbQMShpmZ07Jub+zn7pIy2y6xHGQSRe3Z2wf7rI8VjqyH3OnuGT/HLLEaslGWuPTSaswoO1HljG61ttjoPk1czfeABeNQGzmzYgPEVENBRhjr46AR95Thyjbo803B/fsk/uFDVAVrLZZAveqQvl7gNcewLyRetDWKm95GM30Sl8vZkhHXJc9OIHu17QOnsjTKaBa2J6CVTT+E3f6Fc5Pyr4FxfZN/FK99MDf6GWFg=
