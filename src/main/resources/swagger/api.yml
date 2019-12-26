@@ -2262,6 +2262,11 @@ paths:
         - Loyalty Earn
       operationId: Earn Loyalty Balance
       parameters:
+        - name: profileId
+          in: header
+          required: true
+          schema:
+            type: string
         - name: accountId
           in: path
           required: true
@@ -2272,6 +2277,12 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoyaltyEarnDTO"
+        required: true
       responses:
         "201":
           description: Created
@@ -2495,6 +2506,11 @@ servers:
   - url: http://serverRoot/tmf-api/loyaltyManagement/v1
 components:
   requestBodies:
+    LoyaltyEarnDTO:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/LoyaltyEarnDTO"
     LoyaltyEventType:
       content:
         application/json:
@@ -2520,6 +2536,21 @@ components:
             $ref: "#/components/schemas/CreateLoyaltyRule"
       required: true
   schemas:
+    LoyaltyEarnDTO:
+      title: Loyalty Earn DTO object
+      type: object
+      properties:
+        id:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        description:
+          type: string
+      required:
+        - id
+        - quantity
+        - description
     ProgramProductSpec:
       title: ProgramProductSpec
       type: object
