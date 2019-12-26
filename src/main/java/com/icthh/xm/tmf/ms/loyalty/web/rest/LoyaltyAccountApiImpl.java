@@ -1,4 +1,4 @@
-package com.icthh.xm.tmf.ms.loyalty.service;
+package com.icthh.xm.tmf.ms.loyalty.web.rest;
 
 import com.icthh.xm.commons.lep.LogicExtensionPoint;
 import com.icthh.xm.commons.lep.spring.LepService;
