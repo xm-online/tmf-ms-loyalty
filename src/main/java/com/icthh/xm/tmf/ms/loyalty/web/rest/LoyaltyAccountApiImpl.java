@@ -2,6 +2,7 @@ package com.icthh.xm.tmf.ms.loyalty.web.rest;
 
 import com.icthh.xm.commons.lep.LogicExtensionPoint;
 import com.icthh.xm.commons.lep.spring.LepService;
+import com.icthh.xm.tmf.ms.loyalty.lep.keyresolver.ProfileChannelKeyResolver;
 import com.icthh.xm.tmf.ms.loyalty.web.api.LoyaltyAccountApiDelegate;
 import com.icthh.xm.tmf.ms.loyalty.web.api.model.LoyaltyEarnDTO;
 import com.icthh.xm.tmf.ms.loyalty.web.api.model.LoyaltyTransactionRef;
@@ -14,11 +15,11 @@ import org.springframework.stereotype.Service;
 @LepService(group = "methods")
 public class LoyaltyAccountApiImpl implements LoyaltyAccountApiDelegate {
 
-    @LogicExtensionPoint(value = "earnLoyaltyBalance")
+    @LogicExtensionPoint(value = "earnLoyaltyBalance", resolver = ProfileChannelKeyResolver.class)
     public ResponseEntity<LoyaltyTransactionRef> earnLoyaltyBalance(String profileId,
                                                                     String accountId,
                                                                     String balanceId,
-                                                                    LoyaltyEarnDTO loyaltyEarnDTO){
+                                                                    LoyaltyEarnDTO loyaltyEarnDTO) {
         return null;
     }
 }
