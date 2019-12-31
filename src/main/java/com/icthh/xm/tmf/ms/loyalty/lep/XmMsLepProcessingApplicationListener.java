@@ -7,7 +7,9 @@ import com.icthh.xm.commons.lep.commons.CommonsService;
 import com.icthh.xm.commons.lep.spring.SpringLepProcessingApplicationListener;
 import com.icthh.xm.commons.permission.service.PermissionCheckService;
 import com.icthh.xm.lep.api.ScopedContext;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -18,7 +20,7 @@ import static com.icthh.xm.tmf.ms.loyalty.lep.LepXmAccountMsConstants.*;
 /**
  * The {@link XmMsLepProcessingApplicationListener} class.
  */
-@RequiredArgsConstructor
+@Component
 public class XmMsLepProcessingApplicationListener extends SpringLepProcessingApplicationListener {
 
 
@@ -26,15 +28,27 @@ public class XmMsLepProcessingApplicationListener extends SpringLepProcessingApp
 
     private final RestTemplate restTemplate;
 
+    private final JdbcTemplate jdbcTemplate;
+
     private final CommonsService commonsService;
     private final PermissionCheckService permissionCheckService;
 
+    public XmMsLepProcessingApplicationListener(TenantConfigService tenantConfigService,
+                                                        @Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
+                                                        CommonsService commonsService, PermissionCheckService permissionCheckService,
+                                                        JdbcTemplate jdbcTemplate) {
+        this.tenantConfigService = tenantConfigService;
+        this.restTemplate = restTemplate;
+        this.commonsService = commonsService;
+        this.permissionCheckService = permissionCheckService;
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     protected void bindExecutionContext(ScopedContext executionContext) {
         // services
         Map<String, Object> services = new HashMap<>();
-        services.put(BINDING_SUB_KEY_SERVICE_TENANT_CONFIG_SERICE, tenantConfigService);
+        services.put(BINDING_SUB_KEY_SERVICE_TENANT_CONFIG_SERVICE, tenantConfigService);
         services.put(BINDING_SUB_KEY_PERMISSION_SERVICE, permissionCheckService);
 
         executionContext.setValue(BINDING_KEY_COMMONS, new CommonsExecutor(commonsService));
@@ -43,8 +57,7 @@ public class XmMsLepProcessingApplicationListener extends SpringLepProcessingApp
         // templates
         Map<String, Object> templates = new HashMap<>();
         templates.put(BINDING_SUB_KEY_TEMPLATE_REST, restTemplate);
-
+        templates.put(BINDING_KEY_JDBC, jdbcTemplate);
         executionContext.setValue(BINDING_KEY_TEMPLATES, templates);
     }
-
 }

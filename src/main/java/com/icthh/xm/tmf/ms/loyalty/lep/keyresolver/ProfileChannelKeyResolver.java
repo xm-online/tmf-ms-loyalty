@@ -14,11 +14,9 @@ public class ProfileChannelKeyResolver extends AppendLepKeyResolver {
                                          LepMethod method,
                                          LepManagerService managerService) {
 
-        String product   = getRequiredParam(method, "profile"  , String.class);
-        String channelId = getRequiredParam(method, "channelId", String.class);
+        String profile   = getRequiredParam(method, "profileId"  , String.class);
 
-        product   = translateToLepConvention(product);
-        channelId = translateToLepConvention(channelId);
+        profile   = translateToLepConvention(profile);
 
-        return new String[]{product, channelId};
+        return new String[]{profile};
     }}
