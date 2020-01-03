@@ -2262,11 +2262,6 @@ paths:
         - Loyalty Earn
       operationId: Earn Loyalty Balance
       parameters:
-        - name: profileId
-          in: header
-          required: true
-          schema:
-            type: string
         - name: accountId
           in: path
           required: true
