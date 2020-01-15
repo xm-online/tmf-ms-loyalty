@@ -19,7 +19,7 @@ public class ProfileChannelKeyResolver extends AppendLepKeyResolver {
                                          LepMethod method,
                                          LepManagerService managerService) {
 
-        String profile   = getProfileIdFromRequestHeader();
+        String profile = getProfileIdFromRequestHeader();
         profile   = translateToLepConvention(profile);
         return new String[]{profile};
     }
@@ -29,7 +29,7 @@ public class ProfileChannelKeyResolver extends AppendLepKeyResolver {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes instanceof ServletRequestAttributes) {
             HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-            result = request.getHeader("profileId");
+            result = request.getHeader("profile");
         }
         return result;
     }
