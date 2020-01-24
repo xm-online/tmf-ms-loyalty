@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class LoyaltyAccountApiImpl implements LoyaltyAccountApiDelegate {
 
     @LogicExtensionPoint(value = "earnLoyaltyBalance", resolver = ProfileChannelKeyResolver.class)
+    @Override
     public ResponseEntity<LoyaltyTransactionRef> earnLoyaltyBalance(String accountId,
                                                                     String balanceId,
                                                                     LoyaltyEarnDTO loyaltyEarnDTO) {
