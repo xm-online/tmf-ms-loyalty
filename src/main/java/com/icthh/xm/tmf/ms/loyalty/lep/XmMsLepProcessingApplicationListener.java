@@ -1,12 +1,12 @@
 package com.icthh.xm.tmf.ms.loyalty.lep;
 
-
 import com.icthh.xm.commons.config.client.service.TenantConfigService;
 import com.icthh.xm.commons.lep.commons.CommonsExecutor;
 import com.icthh.xm.commons.lep.commons.CommonsService;
 import com.icthh.xm.commons.lep.spring.SpringLepProcessingApplicationListener;
 import com.icthh.xm.commons.permission.service.PermissionCheckService;
 import com.icthh.xm.lep.api.ScopedContext;
+import com.icthh.xm.tmf.ms.loyalty.service.SeparateTransactionExecutor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -29,19 +29,22 @@ public class XmMsLepProcessingApplicationListener extends SpringLepProcessingApp
     private final RestTemplate restTemplate;
 
     private final JdbcTemplate jdbcTemplate;
+    private final SeparateTransactionExecutor transactionExecutor;
 
     private final CommonsService commonsService;
     private final PermissionCheckService permissionCheckService;
 
     public XmMsLepProcessingApplicationListener(TenantConfigService tenantConfigService,
-                                                        @Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
-                                                        CommonsService commonsService, PermissionCheckService permissionCheckService,
-                                                        JdbcTemplate jdbcTemplate) {
+                                                @Qualifier("loadBalancedRestTemplate") RestTemplate restTemplate,
+                                                CommonsService commonsService, PermissionCheckService permissionCheckService,
+                                                JdbcTemplate jdbcTemplate,
+                                                SeparateTransactionExecutor transactionExecutor) {
         this.tenantConfigService = tenantConfigService;
         this.restTemplate = restTemplate;
         this.commonsService = commonsService;
         this.permissionCheckService = permissionCheckService;
         this.jdbcTemplate = jdbcTemplate;
+        this.transactionExecutor = transactionExecutor;
     }
 
     @Override
@@ -50,6 +53,7 @@ public class XmMsLepProcessingApplicationListener extends SpringLepProcessingApp
         Map<String, Object> services = new HashMap<>();
         services.put(BINDING_SUB_KEY_SERVICE_TENANT_CONFIG_SERVICE, tenantConfigService);
         services.put(BINDING_SUB_KEY_PERMISSION_SERVICE, permissionCheckService);
+        services.put(BINDING_SUB_KEY_SERVICE_SEPARATE_TRANSACTION_EXECUTOR, transactionExecutor);
 
         executionContext.setValue(BINDING_KEY_COMMONS, new CommonsExecutor(commonsService));
         executionContext.setValue(BINDING_KEY_SERVICES, services);
