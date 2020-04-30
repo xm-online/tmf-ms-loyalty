@@ -52,6 +52,7 @@ apply plugin: 'pmd'
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
 apply from: "gradle/swagger.gradle"
+apply from: "gradle/version.gradle"
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
 apply plugin: 'war'
