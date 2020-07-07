@@ -1,0 +1,50 @@
+language: java
+jdk:
+  - openjdk11
+install: true
+addons:
+  sonarcloud:
+    organization: xm-online
+    token:
+      secure: atrAlWiGSNNlvrk8lGyjN+rf4difuPYdYrYUPLW/RStgNF6tjV2o6F0xEoEbtfMecrPkPwu6RAc5lXn6WyUL6FHs3FofztHjo79SQ4bB62Pd0gTOm+ui+ZJsKgkJMH7buRNZ8MJVqmLp1xylkoLO5VVeNr4kXYVjtRu6qDvjSYPR0QXIhdr6tqXdhAXmJ6LSMtrMqKbUhYcf5AF0drs8krW3rrDNS3OgK+fUNa/j2+7BF+/+JYt8Kj/eNQGZRjv9xEA4oIM6yQPkzr4U2BO0QXqrNATWkjSmzQwwdsFHlaIFLta3GztbfLhLl71IKf9VT105C4lB6xqA8kw0ZreLD4D9PBWJJ8APWu/ZmYQ5f1Ol8c/eR+noJHuPAF8xoZhk15tlTv8CVlKe4XUo7EQ3wCm+g0pqIUxwhEq7rI0AVXClfs7uqiuXidGeQ51gz4OHX0dw4kJvW+KcRXMm/X8AQLH6BnewJb3SWjk8viHakQLOU8XeZ7mjf5AMvGwRjLNr2bqI0qKAsu+B4+zHexKPqZ672wOgDqfjbHjMRTjqiChwK4CnmsitXSlDEaMusSalCdIJ1ygca2O5Qrunoz2wksqYz7bHh+a6cxy/c3rtHv3d7wKmBvlubUbEoY/dd4bJrWpk0xPTI1mS+yqUwPuv9DdomUb7TWYvmc0UHzRiP+Q=
+    branches:
+      - master
+
+script:
+  - set -e
+  - "./gradlew --no-daemon --refresh-dependencies clean check test"
+  - "./gradlew -x test -Pprod --no-daemon bootWar"
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - export DOCKER_REPO=$(echo  -n $TRAVIS_REPO_SLUG | sed -e 's/^xm-online\//xmonline\//g')
+  - export IMAGE_BRANCH=$(echo -n $TRAVIS_BRANCH | sed -e 's/\//-/g')
+  - export PROJECT_VERSION="$IMAGE_BRANCH"
+  - if [ "$IMAGE_BRANCH" == "master" ]; 
+    then 
+        PROJECT_VERSION=$(./gradlew -q  getProjectVersion);
+        export SONAR_PK=$(echo  -n $TRAVIS_REPO_SLUG | sed -e 's/\//:/g');
+        ./gradlew -x test --no-daemon sonarqube -Dsonar.projectKey="$SONAR_PK"
+        -Dsonar.projectName="$SONAR_PK" -Dsonar.java.binaries="." -Dsonar.projectVersion="$IMAGE_BRANCH";
+        TAGS="$PROJECT_VERSION $PROJECT_VERSION-$TRAVIS_BUILD_NUMBER $(echo $PROJECT_VERSION | awk -F '.' '{printf $1"."$2" "$1}') latest";
+    else
+        TAGS="$IMAGE_BRANCH $IMAGE_BRANCH-$TRAVIS_BUILD_NUMBER";
+    fi
+  - docker build -t app-docker-img --label commit_id="$TRAVIS_COMMIT" --label version="$PROJECT_VERSION" --label build_number="$TRAVIS_BUILD_NUMBER" --label build_url="$TRAVIS_BUILD_WEB_URL" --label git_url="$TRAVIS_REPO_SLUG" --label commit_message="$TRAVIS_COMMIT_MESSAGE" -f src/main/docker/Dockerfile .
+  - for TAG in $TAGS;
+    do
+        docker tag app-docker-img $DOCKER_REPO:$TAG;
+        docker push $DOCKER_REPO:$TAG;
+    done
+
+cache:
+  directories:
+    - "~/.gradle"
+    - "~/.m2"
+env:
+  global:
+    - secure: pa6UB3z5rHafv49wCP7RQt+YIRkNL5jfQTGcFZ2MBPNG04ara4/eih55Rz9b910FZMbKTIjZSriyJkWDb8Eb51eAiyZM/eRqnGMjC/3/j+h9dm3HUH2vSo/8TOp4eFGDyHKQwuWoZonZasUQ1ctxStKZME1ba5/svSlZOkJPMYVR7/8MaR1UGqarboO4J5aEQh52nX63P1DkU2WvK/Nfq9FJFY8tjgPXRxZSG7ujeLo17t2I7OjqlhSQgF6SnPCAoE1enBSr1jUHGHx1sIXp4hldyxe/MKaRX/+h4nlqed5YYheyJaFeb1M6Oibw34CIQ/FxCcYH6mJ419/uSpyfzknejMr9EGt2WchMR05WBIAUm/XROAbdhSACTD8pez3wR76onqHpnBGAROTBIrZo7ObV99Dy/drrx8B6yAYPhq7s3z94tnrbX7ZOg41zM6gPNs+UR9/4ZRlaz8dkcEvlRHwDB8e6FqrWHOFFj2BBSsc+7F47SgMRfenmBAorfEfwBT4u4MEfRBOydzOlgWY06/Afg7+wxT6Y+NCKDR0YACKrEtOiDuBrX+KmkvToYzDdSX/Tkv5/STl0MwgEmESUg9BWU/I/sRIssHxP+2+4ldh/7/hzVUli1v8SOL5RnUK2G6C6RJwAv6Wlo40H4xY7AOF7V1Vqj+Lc3BfB1EyN530=
+    - secure: rtbLq98me6aoFI/Orrz09shqFFF6eOG21jaVV38CcTMxchd95G5EvSly1ROqg7vAVNS9KrCWo2c5niGjvJZUfKZ54D189IoTPK0m1gqEtOTurBBb2Y/t2PtMpsefcfMOIelKeLBsIcB0KKDtGOsPEHpHux+2hywJ+uWCpbR+9BbsTJbBlKUcKyMQlTJKx4o0vPMukZZaUNPsbFJcMR4gD+rgThLwhQcFMMeide2FtqFSFqHmvBCQzDsD9kdzItH5cBrSOjqmzN1sRC0RWwSB8q/+Bq2dolUk2uyE1CZVk+ogi2qvqGtt4+q6Xs4NbYYaW+PKq+w25/QaM8/mr0hYqvp9XQWpLq0uEqNPuyYKXIFr0Acresfva8j++w1xz7tY2JL2i2cJxx6lJo33M0O/iRvJgSA66ol5/yWte+sS+Rm1p1diH1GV+4vR3VdlmT1yVPKk/RNPfgo3NarwbmTZW909gykiBHOmgLwb/Jlr+Ir3pFya4Os9qHJv993TKQ5FJvZwO64NGcwcYeK41KSm7Vo4K29p+t3/DU+bpDo2chcIwHfkZ4YY9ubC5uw75tmvKiPE9vbVnvW2fqqF/DFsqBwi8Cn0j+4zgUUmDIVrzjO9zEcdZw9sD4VLMQ5/punc09p2TONeZk4tF7jYt52eEx/4Ji2PoSqKJd6PiWZ/4p4=
+
+notifications:
+  slack:
+    rooms:
+      secure: eHvxMZJsCw0vBFWkSsL8YIwam4b43HppJ2m9I+QhW6v/oG7LdxxKeDjpTOn7ramXZxxGZEqibA5QjilMqnraPzHy3lqo7x8+LQXMN5sfDI/B6TZmWZ5r2oEr384L3p02xLwalA2I18xjPwWEQFdERL4wzJNvvXIki/T3X3GGi4pglAfyM6gLTsP0H0fA4WSj8e6Z9Ap7B1UD3tcwKk6+9vbJUEmc+HTx6my317hkmbi/I6mXZb9p63q2yvKnjEaU8vlULYls3gPxQDrozLbDMN5dFATS2p5mqrJVNY8r3gcJb0l38eFVzl09YWiNTfEWgT9k1zi3O9FF8GG2VyJQv8i4LGcwZE1Wrdd1iakWugXlHTnROD1wjmgIwN7f0UBX6VXztJ92NXqKus5CkfBioksi45uHLJJFbnz8vMXQCCkidW/VVg91GitMjN1s16JcXbBbQMShpmZ07Jub+zn7pIy2y6xHGQSRe3Z2wf7rI8VjqyH3OnuGT/HLLEaslGWuPTSaswoO1HljG61ttjoPk1czfeABeNQGzmzYgPEVENBRhjr46AR95Thyjbo803B/fsk/uFDVAVrLZZAveqQvl7gNcewLyRetDWKm95GM30Sl8vZkhHXJc9OIHu17QOnsjTKaBa2J6CVTT+E3f6Fc5Pyr4FxfZN/FK99MDf6GWFg=
