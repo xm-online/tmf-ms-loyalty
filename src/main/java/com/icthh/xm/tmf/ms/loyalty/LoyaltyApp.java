@@ -3,8 +3,6 @@ package com.icthh.xm.tmf.ms.loyalty;
 import com.icthh.xm.tmf.ms.loyalty.config.ApplicationProperties;
 import com.icthh.xm.tmf.ms.loyalty.config.DefaultProfileUtil;
 
-import com.icthh.xm.tmf.ms.loyalty.service.LoyaltyKafkaConsumer;
-import com.icthh.xm.tmf.ms.loyalty.service.LoyaltyKafkaProducer;
 import org.springframework.context.ConfigurableApplicationContext;
 import io.github.jhipster.config.JHipsterConstants;
 
@@ -66,8 +64,6 @@ public class LoyaltyApp implements InitializingBean {
         SpringApplication app = new SpringApplication(LoyaltyApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         ConfigurableApplicationContext applicationContext = app.run(args);
-        applicationContext.getBean(LoyaltyKafkaProducer.class).init();
-        applicationContext.getBean(LoyaltyKafkaConsumer.class).start();
         Environment env = applicationContext.getEnvironment();
         logApplicationStartup(env);
     }
