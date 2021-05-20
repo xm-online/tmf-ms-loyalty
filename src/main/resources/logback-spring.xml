@@ -10,6 +10,10 @@
         </encoder>
     </appender>
 
+    <appender name="STDOUT_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender> 
+    
     <logger name="com.icthh.xm" level="INFO"/>
 
     <logger name="javax.activation" level="WARN"/>
@@ -54,7 +58,7 @@
     </contextListener>
 
     <root level="INFO">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="${LOG_APPENDER_NAME:-STDOUT}"/>
     </root>
 
 </configuration>
