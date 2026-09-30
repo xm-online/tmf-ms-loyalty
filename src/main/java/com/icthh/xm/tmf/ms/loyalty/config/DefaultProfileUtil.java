@@ -1,6 +1,6 @@
 package com.icthh.xm.tmf.ms.loyalty.config;
 
-import io.github.jhipster.config.JHipsterConstants;
+import tech.jhipster.config.JHipsterConstants;
 
 import org.springframework.boot.SpringApplication;
 
