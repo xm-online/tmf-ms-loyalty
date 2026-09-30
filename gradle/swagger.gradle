@@ -7,13 +7,13 @@ apply plugin: "org.openapi.generator"
 openApiGenerate {
     generatorName = "spring"
     inputSpec = "$rootDir/src/main/resources/swagger/api.yml".toString()
-    outputDir = "$buildDir/openapi".toString()
+    outputDir = layout.buildDirectory.dir("openapi").get().asFile.toString()
     apiPackage = "com.icthh.xm.tmf.ms.loyalty.web.api"
     modelPackage = "com.icthh.xm.tmf.ms.loyalty.web.api.model"
     apiFilesConstrainedTo = [""]
     modelFilesConstrainedTo = [""]
     supportingFilesConstrainedTo = ["ApiUtil.java"]
-    configOptions = [delegatePattern: "true", title: "loyalty"]
+    configOptions = [delegatePattern: "true", title: "loyalty", useSpringBoot3: "true", useJakartaEe: "true"]
     validateSpec = true
     importMappings = [Problem:"org.zalando.problem.Problem"]
 }
@@ -21,7 +21,7 @@ openApiGenerate {
 sourceSets {
     main {
         java {
-            srcDir file("${project.buildDir.path}/openapi/src/main/java")
+            srcDir file(layout.buildDirectory.dir("openapi/src/main/java").get().asFile)
         }
     }
 }
