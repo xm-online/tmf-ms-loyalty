@@ -135,11 +135,14 @@ public class HibernateTimeZoneIT {
 
         String request = generateSqlRequest("offset_time", dateTimeWrapper.getId());
         SqlRowSet resultSet = jdbcTemplate.queryForRowSet(request);
+        // Hibernate 6+ (hibernate.timezone.default_storage: NORMALIZE) stores OffsetTime normalized to the
+        // system offset, not as the local time part - same expectation as the JHipster 8 generated test,
+        // see https://github.com/jhipster/generator-jhipster/issues/22579
         String expectedValue = dateTimeWrapper
             .getOffsetTime()
-            .toLocalTime()
-            .atDate(LocalDate.of(1970, Month.JANUARY, 1))
-            .atZone(ZoneId.systemDefault())
+            .withOffsetSameInstant(ZoneOffset.UTC)
+            .withOffsetSameLocal(OffsetDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault()).getOffset())
+            .withOffsetSameInstant(ZoneOffset.UTC)
             .format(timeFormatter);
 
         assertThatDateStoredValueIsEqualToInsertDateValueOnGMTTimeZone(resultSet, expectedValue);

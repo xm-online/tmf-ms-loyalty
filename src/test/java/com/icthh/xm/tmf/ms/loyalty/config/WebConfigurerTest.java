@@ -1,8 +1,7 @@
 package com.icthh.xm.tmf.ms.loyalty.config;
 
-import io.github.jhipster.config.JHipsterConstants;
-import io.github.jhipster.config.JHipsterProperties;
-import org.h2.server.web.WebServlet;
+import tech.jhipster.config.JHipsterConstants;
+import tech.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -11,12 +10,12 @@ import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.servlet.*;
-import java.util.*;
+import jakarta.servlet.ServletException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.spy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -38,10 +37,6 @@ public class WebConfigurerTest {
     @BeforeEach
     public void setup() {
         servletContext = spy(new MockServletContext());
-        doReturn(mock(FilterRegistration.Dynamic.class))
-            .when(servletContext).addFilter(anyString(), any(Filter.class));
-        doReturn(mock(ServletRegistration.Dynamic.class))
-            .when(servletContext).addServlet(anyString(), any(Servlet.class));
 
         env = new MockEnvironment();
         props = new JHipsterProperties();
@@ -53,21 +48,19 @@ public class WebConfigurerTest {
     public void testStartUpProdServletContext() throws ServletException {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
         webConfigurer.onStartup(servletContext);
-
-        verify(servletContext, never()).addServlet(eq("H2Console"), any(WebServlet.class));
     }
 
     @Test
     public void testStartUpDevServletContext() throws ServletException {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);
+        // the H2 console servlet is gone: jHipster 9 has no H2 console helper, Boot's spring.h2.console replaces it
         webConfigurer.onStartup(servletContext);
-
-        verify(servletContext).addServlet(eq("H2Console"), any(WebServlet.class));
     }
 
     @Test
     public void testCorsFilterOnApiPath() throws Exception {
-        props.getCors().setAllowedOrigins(Collections.singletonList("*"));
+        // Spring 5.3+ rejects allowedOrigins "*" together with allowCredentials; patterns keep the same behavior
+        props.getCors().setAllowedOriginPatterns(Collections.singletonList("*"));
         props.getCors().setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         props.getCors().setAllowedHeaders(Collections.singletonList("*"));
         props.getCors().setMaxAge(1800L);
@@ -97,7 +90,7 @@ public class WebConfigurerTest {
 
     @Test
     public void testCorsFilterOnOtherPath() throws Exception {
-        props.getCors().setAllowedOrigins(Collections.singletonList("*"));
+        props.getCors().setAllowedOriginPatterns(Collections.singletonList("*"));
         props.getCors().setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         props.getCors().setAllowedHeaders(Collections.singletonList("*"));
         props.getCors().setMaxAge(1800L);
