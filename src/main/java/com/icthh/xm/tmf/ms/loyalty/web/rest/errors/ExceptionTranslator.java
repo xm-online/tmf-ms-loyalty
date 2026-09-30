@@ -1,8 +1,11 @@
 package com.icthh.xm.tmf.ms.loyalty.web.rest.errors;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -17,6 +20,7 @@ import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,13 +31,18 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.Problem;
@@ -92,8 +101,51 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers,
                                                              HttpStatusCode statusCode, WebRequest request) {
-        return respond(withMessage(statusCode.value(), reasonPhrase(statusCode.value()), ex.getMessage(), request),
+        if (ex instanceof NoResourceFoundException) {
+            // Spring 6.1+ throws for an unmapped path; before, the servlet container answered with its error page
+            sendError(request, statusCode.value());
+            return null;
+        }
+        return respond(withMessage(statusCode.value(), reasonPhrase(statusCode.value()), legacyDetail(ex), request),
             statusCode, headers);
+    }
+
+    /**
+     * Spring 6 reworded the messages of its MVC exceptions; the {@code detail} keeps the Spring 5 texts
+     * the service returned before the migration.
+     */
+    private static String legacyDetail(Exception ex) {
+        if (ex instanceof HttpRequestMethodNotSupportedException e) {
+            return "Request method '" + e.getMethod() + "' not supported";
+        }
+        if (ex instanceof HttpMediaTypeNotSupportedException e && e.getContentType() != null) {
+            return "Content type '" + e.getContentType() + "' not supported";
+        }
+        if (ex instanceof MissingServletRequestParameterException e) {
+            return "Required " + e.getParameterType() + " parameter '" + e.getParameterName() + "' is not present";
+        }
+        if (ex instanceof MissingServletRequestPartException e) {
+            return "Required request part '" + e.getRequestPartName() + "' is not present";
+        }
+        if (ex instanceof TypeMismatchException e && e.getRequiredType() != null && e.getValue() != null) {
+            String detail = "Failed to convert value of type '" + e.getValue().getClass().getName()
+                + "' to required type '" + e.getRequiredType().getName() + "'";
+            return e.getCause() == null ? detail : detail + "; nested exception is " + e.getCause();
+        }
+        return ex.getMessage();
+    }
+
+    private static void sendError(WebRequest request, int status) {
+        if (request instanceof NativeWebRequest webRequest) {
+            HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
+            if (response != null) {
+                try {
+                    response.sendError(status);
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            }
+        }
     }
 
     @ExceptionHandler

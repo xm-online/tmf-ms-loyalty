@@ -13,7 +13,12 @@ openApiGenerate {
     apiFilesConstrainedTo = [""]
     modelFilesConstrainedTo = [""]
     supportingFilesConstrainedTo = ["ApiUtil.java"]
-    configOptions = [delegatePattern: "true", title: "loyalty", useSpringBoot3: "true", useJakartaEe: "true"]
+    configOptions = [delegatePattern: "true", title: "loyalty", useSpringBoot3: "true", useJakartaEe: "true",
+                     // generator 7 initializes collections with an empty list; keep null as the 4.x generator did
+                     containerDefaultToNull: "true",
+                     // Jackson 3 deserializes through a required-args constructor: absent fields became null
+                     // instead of the model defaults, and constructor properties were written first
+                     generatedConstructorWithRequiredArgs: "false"]
     validateSpec = true
     importMappings = [Problem:"org.zalando.problem.Problem"]
 }
