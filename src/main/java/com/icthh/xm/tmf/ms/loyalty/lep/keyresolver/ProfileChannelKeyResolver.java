@@ -11,7 +11,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
- * Appends the {@code profile} request header to the LEP key, e.g. {@code earnLoyaltyBalance$$B2C}.
+ * Appends the {@code profile} request header to the LEP key, e.g. {@code EarnLoyaltyBalance$$B2C}.
  * xm-commons 5 also looks up the legacy script name ({@code -} to {@code _}, {@code .} to {@code $}),
  * which the xm-commons 2 resolver used to build.
  */
