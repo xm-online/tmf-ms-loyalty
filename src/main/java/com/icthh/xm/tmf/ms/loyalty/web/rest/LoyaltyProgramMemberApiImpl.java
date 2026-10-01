@@ -16,7 +16,7 @@ import java.util.List;
 @LepService(group = "methods")
 public class LoyaltyProgramMemberApiImpl implements LoyaltyProgramMemberApiDelegate {
 
-    @LogicExtensionPoint(value = "listProducts", resolver = ProfileChannelKeyResolver.class)
+    @LogicExtensionPoint(value = "ListProducts", resolver = ProfileChannelKeyResolver.class)
     @Override
     public ResponseEntity<List<ProductProgramRef>> listProducts(String memberId) {
         return ResponseEntity.ok(List.of());
