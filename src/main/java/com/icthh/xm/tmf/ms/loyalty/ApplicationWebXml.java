@@ -1,6 +1,6 @@
 package com.icthh.xm.tmf.ms.loyalty;
 
-import com.icthh.xm.tmf.ms.loyalty.config.DefaultProfileUtil;
+import tech.jhipster.config.DefaultProfileUtil;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
