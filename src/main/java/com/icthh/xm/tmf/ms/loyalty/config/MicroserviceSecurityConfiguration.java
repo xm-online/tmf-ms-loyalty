@@ -23,7 +23,7 @@ public class MicroserviceSecurityConfiguration extends SecurityConfiguration {
     /**
      * The xm-commons rules plus the fallback the service had before the migration: the Spring Security OAuth2
      * resource server permitted requests matched by no rule (the TMF API under /tmf-api is not under /api),
-     * while Spring Security 6 denies them. Tightening this is a behaviour change and needs a separate decision.
+     * while Spring Security 6 denies them.
      */
     @Override
     protected HttpSecurity applyUrlSecurity(HttpSecurity http) {
