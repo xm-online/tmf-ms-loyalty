@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @LepService(group = "methods")
 public class LoyaltyAccountApiImpl implements LoyaltyAccountApiDelegate {
 
-    @LogicExtensionPoint(value = "earnLoyaltyBalance", resolver = ProfileChannelKeyResolver.class)
+    @LogicExtensionPoint(value = "EarnLoyaltyBalance", resolver = ProfileChannelKeyResolver.class)
     @Override
     public ResponseEntity<LoyaltyTransactionRef> earnLoyaltyBalance(String accountId,
                                                                     String balanceId,
