@@ -1,10 +1,10 @@
 package com.icthh.xm.tmf.ms.loyalty;
 
 import com.icthh.xm.tmf.ms.loyalty.config.ApplicationProperties;
-import com.icthh.xm.tmf.ms.loyalty.config.DefaultProfileUtil;
 
 import org.springframework.context.ConfigurableApplicationContext;
-import io.github.jhipster.config.JHipsterConstants;
+import tech.jhipster.config.DefaultProfileUtil;
+import tech.jhipster.config.JHipsterConstants;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
+import org.springframework.boot.liquibase.autoconfigure.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.core.env.Environment;
