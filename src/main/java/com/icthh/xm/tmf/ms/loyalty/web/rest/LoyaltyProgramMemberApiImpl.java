@@ -5,6 +5,7 @@ import com.icthh.xm.commons.permission.annotation.PrivilegeDescription;
 import com.icthh.xm.commons.lep.spring.LepService;
 import com.icthh.xm.tmf.ms.loyalty.lep.keyresolver.ProfileChannelKeyResolver;
 import com.icthh.xm.tmf.ms.loyalty.web.api.LoyaltyProgramMemberApiDelegate;
+import com.icthh.xm.tmf.ms.loyalty.web.api.model.LoyaltyMember;
 import com.icthh.xm.tmf.ms.loyalty.web.api.model.ProductProgramRef;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @LepService(group = "methods")
 public class LoyaltyProgramMemberApiImpl implements LoyaltyProgramMemberApiDelegate {
+
+    @PreAuthorize("hasPermission('LOYALTY.MEMBER.GET_LIST')")
+    @PrivilegeDescription("Privilege to get loyalty program members")
+    @LogicExtensionPoint(value = "GetMembers", resolver = ProfileChannelKeyResolver.class)
+    @Override
+    public ResponseEntity<List<LoyaltyMember>> getMembers() {
+        return ResponseEntity.ok(List.of());
+    }
 
     @PreAuthorize("hasPermission({'memberId': #memberId}, 'LOYALTY.MEMBER.PRODUCT.GET_LIST')")
     @PrivilegeDescription("Privilege to get loyalty program member products")
