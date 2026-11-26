@@ -19,7 +19,7 @@ import java.util.List;
 @LepService(group = "methods")
 public class LoyaltyProgramMemberApiImpl implements LoyaltyProgramMemberApiDelegate {
 
-    @PreAuthorize("hasPermission('LOYALTY.MEMBER.GET_LIST')")
+    @PreAuthorize("hasPermission({},'LOYALTY.MEMBER.GET_LIST')")
     @PrivilegeDescription("Privilege to get loyalty program members")
     @LogicExtensionPoint(value = "GetMembers", resolver = ProfileChannelKeyResolver.class)
     @Override
